@@ -56,6 +56,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   const btnRunCheck      = document.getElementById('btnRunCheck');
   const btnClearInput    = document.getElementById('btnClearInput');
   const operatorSelect   = document.getElementById('operatorSelect');
+  const savedOperator = localStorage.getItem('thelong_selected_operator');
+  if (savedOperator && Array.from(operatorSelect.options).some(o => o.value === savedOperator)) {
+    operatorSelect.value = savedOperator;
+  }
+  operatorSelect.addEventListener('change', () => {
+    localStorage.setItem('thelong_selected_operator', operatorSelect.value);
+  });
   const tabSelect        = document.getElementById('tabSelect');
   const outputZalo       = document.getElementById('outputZalo');
   const btnCopyZalo      = document.getElementById('btnCopyZalo');
