@@ -68,7 +68,7 @@
 
   <main class="max-w-screen-xl mx-auto px-4 py-3 flex-1 w-full space-y-3">
 
-    <section class="bg-white rounded-xl border border-blue-200 p-4 text-sm">
+    <section class="hidden bg-white rounded-xl border border-blue-200 p-4 text-sm">
       <h2 class="font-bold text-blue-800">Dùng Gem của bạn trên Gemini</h2>
       <p class="text-xs text-slate-600 mt-1">Mở giao diện Gem thật ở tab riêng, đăng nhập Google rồi dán booking. Google không cho nhúng giao diện này bên trong trang booking.</p>
       <div class="flex flex-wrap gap-2 mt-3">
@@ -79,7 +79,7 @@
     </section>
 
     <!-- Preset row -->
-    <div class="bg-white rounded-xl shadow-sm border border-slate-200 px-3 py-2 flex flex-wrap items-center gap-2">
+    <div class="hidden bg-white rounded-xl shadow-sm border border-slate-200 px-3 py-2 flex flex-wrap items-center gap-2">
       <span class="text-[11px] font-bold text-slate-400 flex items-center gap-1 mr-1">
         <i class="fa-solid fa-wand-magic-sparkles text-emerald-500"></i> Nạp mẫu Gem:
       </span>
@@ -128,7 +128,7 @@
           <i class="fa-solid fa-bolt text-amber-300" id="btnCreateIcon"></i>
           <span id="btnCreateText">BƯỚC 1 – TẠO FORM ZALO</span>
         </button>
-        <p class="text-[10px] text-slate-400 mt-1 text-center">
+        <p class="hidden text-[10px] text-slate-400 mt-1 text-center">
           <kbd class="px-1 py-0.5 bg-slate-100 border rounded text-[10px]">Ctrl + Enter</kbd> tạo bản nháp · Sửa xong, bấm Sao chép Zalo để xác nhận
         </p>
       </div>
@@ -157,7 +157,7 @@
 
         <div class="mt-3 p-3 rounded-lg bg-amber-50 border border-amber-200 text-xs">
           <button id="btnSaveExample" type="button" class="bg-amber-600 text-white font-bold px-3 py-2 rounded-lg">Lưu mẫu đã sửa để học</button>
-          <p class="mt-2 text-slate-600">Sửa form cho đúng rồi lưu. Dán lại đúng tin gốc hoặc form đã lưu sẽ dùng bản bạn sửa, kể cả khi tắt AI. Tin cùng kiểu: cục bộ học cách đọc các nhãn từ mẫu đã sửa; Gemini tham khảo tối đa 3 mẫu tương tự. Mẫu không có nhãn rõ ràng có thể vẫn cần sửa tay. Không huấn luyện lại model. Mẫu có thông tin khách được lưu trong trình duyệt này và gửi kèm khi dùng Gemini.</p>
+          <p class="hidden mt-2 text-slate-600">Sửa form cho đúng rồi lưu. Dán lại đúng tin gốc hoặc form đã lưu sẽ dùng bản bạn sửa, kể cả khi tắt AI. Tin cùng kiểu: cục bộ học cách đọc các nhãn từ mẫu đã sửa; Gemini tham khảo tối đa 3 mẫu tương tự. Mẫu không có nhãn rõ ràng có thể vẫn cần sửa tay. Không huấn luyện lại model. Mẫu có thông tin khách được lưu trong trình duyệt này và gửi kèm khi dùng Gemini.</p>
           <details class="mt-2"><summary class="cursor-pointer font-semibold">Mẫu đã lưu (<span id="exampleCount">0</span>)</summary><div id="exampleList" class="mt-2 space-y-2 max-h-64 overflow-auto"></div></details>
         </div>
 
@@ -226,7 +226,7 @@
         </div>
 
         <!-- Kết quả đối soát -->
-        <div id="checkResultBox" class="bg-white rounded-xl shadow-sm border p-4 flex items-start gap-3 transition duration-200 border-slate-200">
+        <div id="checkResultBox" class="hidden bg-white rounded-xl shadow-sm border p-4 flex items-start gap-3 transition duration-200 border-slate-200">
           <div id="checkResultIcon" class="w-8 h-8 rounded-lg bg-slate-100 text-slate-400 flex items-center justify-center text-base flex-shrink-0">
             <i class="fa-solid fa-magnifying-glass"></i>
           </div>
