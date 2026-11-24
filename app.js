@@ -308,6 +308,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             ${p.route        ? `<span><i class="fa-solid fa-route text-emerald-500 mr-0.5"></i>${p.route}</span>` : ''}
             ${p.pickupTime   ? `<span>· <i class="fa-regular fa-clock text-slate-400 mr-0.5"></i>${p.pickupTime}</span>` : ''}
             ${p.pickupPoint  ? `<span>· <i class="fa-solid fa-location-dot text-rose-400 mr-0.5"></i>${p.pickupPoint}</span>` : ''}
+            ${p.staff ? `<span class="inline-flex items-center gap-0.5 text-[10px] text-violet-600 bg-violet-50 border border-violet-200 px-1.5 py-0.5 rounded-full font-semibold ml-1"><i class="fa-solid fa-user-check text-[9px]"></i>${p.staff}</span>` : ''}
           </div>
           ${bk.checkStatus === 'found' && bk.matchLabel ? `<p class="text-[10px] text-emerald-600 mt-1 font-medium">✓ Khớp theo: ${escapeText(bk.matchLabel)}</p>` : ''}
           ${bk.checkStatus === 'notfound' ? `<p class="text-[10px] text-rose-500 mt-1 font-medium">⚠️ Không tìm thấy trên Sheet ngày ${escapeText(bk.dayMonthKey)}</p>` : ''}
