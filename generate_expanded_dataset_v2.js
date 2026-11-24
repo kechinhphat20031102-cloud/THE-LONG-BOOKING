@@ -3,7 +3,7 @@ const samples=[];
 const names=['Trần Bảo Ngọc','Chloé Dubois',"Liam O’Connor",'nguyen van binh','Sofia De Luca'];
 for(let family=0;family<8;family++)for(let n=0;n<125;n++){
  const name=names[n%5]+' '+String.fromCharCode(65+Math.floor(n/5)%26);
- const pax=1+n%6,date=`${String(1+n%28).padStart(2,'0')}/${String(1+n%12).padStart(2,'0')}/2029`;
+ const pax=1+n%6,date=`${String(1+n%28).padStart(2,'0')}/${String(1+n%12).padStart(2,'0')}/${2029+Math.floor(n/84)}`;
  const phone='+447000'+String(2000+family*125+n).padStart(6,'0');
  const pickup=`Tam Coc Garden Hotel ${1+n%9}`,drop=`Cat Ba Seaside Hotel ${1+n%7}`;
  let raw='',expected={};

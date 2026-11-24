@@ -33,6 +33,11 @@ HƯỚNG DẪN ĐIỀN FORM VÀ QUY TẮC CỦA THẾ LONG TRAVEL:
 - Tuyến Mai Châu / Pù Luông:
   + Bus limo NB - Mai Châu - Pù Luông: chuyến sáng hẹn 7:30 - 8:00 (hoặc 7:30 - 7:50); chuyến trưa 13:00 hẹn 12:45 - 13:00
   + Bus limo Mai Châu - Pù Luông về NB: chuyến 13:00 / 13:30 hẹn đón 12:45 - 13:00 hoặc 13:00 - 13:30
+- Tuyến Hà Nội - Ninh Bình / Ninh Bình - Hà Nội:
+  + Chuyến 11:00 -> hẹn đón 11:00
+  + Chuyến 14:00 -> hẹn đón 13:10 (Cầu Giấy) hoặc 14:10 (Lý Quốc Sư)
+  + Chuyến 17:00 -> hẹn đón 17:00 - 17:30
+  + Chuyến 20:00 -> hẹn đón 19:45 - 20:15
 - Tour:
   + Tour 4 điểm: hẹn 8:00 - 8:30
   + Tour VL CP: hẹn 7:20 - 7:50
@@ -44,17 +49,64 @@ HƯỚNG DẪN ĐIỀN FORM VÀ QUY TẮC CỦA THẾ LONG TRAVEL:
 - TUYỆT ĐỐI KHÔNG lấy tên khách sạn / nhà nghỉ / bến cảng làm tên khách hàng.
 - Khi có danh sách nhiều khách (vd: Igor Ksiezopolski, Nikola Subocz), TÊN KHÁCH CHỈ LẤY người đại diện đầu tiên kèm SĐT quốc tế (ví dụ: Igor Ksiezopolski +48735977916).
 - Tuyến Tuần Châu / Hạ Long về Ninh Bình: Lịch trình là "HL - NB", Loại xe là "Bus".
+- Điểm trả mặc định: Về Ninh Bình mặc định trả The Long / Tam Cốc; đi Cát Bà mặc định trả Cát Bà / 243 Núi Ngọc / báo sau; về Hà Nội mặc định trả phố cổ.
 
 3. QUY TẮC MÃ CODE & ĐẠI LÝ:
 - Code dạng tlDDMMYY theo ngày đi (ví dụ ngày 19/11/2026 -> tl191126, 25/11/2026 -> tl251126, 18/11/26 -> TL181126).
 - Nhận diện đại lý:
-  + #AAVP9028 -> AAVP9028
-  + #AAVH6204 -> vpl AAVH6204
-  + AAVH6457 -> AAVH6457 (hoặc @VP Long)
+  + #AAVP9028 -> AAVP9028, #AAVH6204 -> vpl AAVH6204, AAVH6457 -> AAVH6457, AAUY9966, AAVN5914, AAVQ5679...
   + Mã vé Vexere (R563ZK, MW0R5Z...) -> VXR [Mã vé]
+  + BUFFALO kèm mã code -> BUFFALO [code] (BUFFALO 810, 1448, 3074, 3122, 3123, 3127, 3437, 4139, 4258, 4259, 4262, 4375, 4439, 4452, 4458...)
+  + FAMILY HOME kèm mã code -> FAMILY HOME [code] (FAMILY HOME 1132, 1136, 1213, 1251, FAMILY HOME BUS 970, 971...)
   + Tuần Châu / HL-NB -> sunlight
   + Mai cho c 2 cát bà 9h (ella) -> NGỌC ĐỀ
   + Axasola / cảng sun -> Anh Sơn
+  + Các đại lý Hà Nội & đối tác: 23 Thông Phong, 37 Hàng Mành, 45 Ngõ Huyện, 64 TRẦN NHẬT DUẬT, 85 mã mây, Trường Thủy, Asia local Tours, DUC DUONG (4 BAT SU), Indochine, Hang Múa Eco Garden, Hoang minh / Hoàng Minh, Beka Travel, chú ngọc, em phương cát bà, Hoài cát bà, Forest Sunset, Lotus Field, Pu Luong Wandering, Pù Luông Roots, PL LAN ANH, bestprice, Ánh hương homestay, TƯỜNG VI - homestay, Quý Limo Cát Bà, tam coc tour, Tam Cốc Holiday...
+  + Mention mapping:
+    * @Hl Việt Nam Easy Go -> vpl
+    * @Dixie -> GMN
+    * @Vneasygotravel -> VPL / AAVN / AAVQ / AAUY
+    * @Thanh Phương -> BUFFALO
+    * @Son Nguyen -> gmn
+    * @Full Moon Travel -> Hoài cát bà
+    * @Linh Linh -> Nb Ventures
+    * @Indochine Boutique Hotel -> indochine hotel
+    * @Ninh Binh Footprint Travel -> Nb FootPrint
+    * @Bìnhbùi Store -> Forest Sunset
+    * @Good Moring Catba Bus And Tours -> GMN
+    * @Thu Hiền Beka Travel -> BEKA TRAVEL BK08988
+    * @Đinh Ngọc Tuấn -> bestprice
+    * @Trangyeuoi / @Family Home Catba -> FAMILY HOME
+    * @Pu Luong Holiday -> Pù Luông Roots
+    * @Nguyễn Hiếu -> VPL
+    * @Phương Dung -> 45 Ngõ Huyện
+    * @Điều Hành Sunlight Travel / Cruise -> sunlight
+    * @Phan Linh Hương Như Ý -> chú ngọc
+    * @Đoan Trang -> Tam Cốc Holiday
+    * @Receptionist Sao Mai Boutique Hotel -> 23 Thông Phong
+    * @Kim Loan -> tam coc tour
+
+4. QUY TẮC GIÁ VÉ & THANH TOÁN (RẤT QUAN TRỌNG):
+- ĐẶC BIỆT CHUYẾN NB - HN, HN - NB, NB - NỘI BÀI HOẶC NGƯỢC LẠI:
+  + BẮT BUỘC ADD GIÁ ĐỂ THANH TOÁN LUÔN!
+  + Xe Limousine HN <-> NB tiêu chuẩn: 220k/pax (1 khách = 220k/pax, 2 khách = 440k, 3 khách = 660k...).
+  + Nếu điểm đón/trả resort cao cấp (Indochine): 360k/pax.
+  + Tuyến Sân bay Nội Bài <-> Ninh Bình: Add giá để thanh toán luôn (Limo thường 300k/pax).
+- ĐẠI LÝ YÊU CẦU CK LUÔN / GỬI UNC TRƯỚC KHI ĐI:
+  + Các đại lý: 23 Thông Phong, Trường Thủy, 37 Hàng Mành, Asia local Tours, 64 TRẦN NHẬT DUẬT, em phương cát bà (hoặc khi tin nhắn yêu cầu gửi UNC / chuyển khoản trước).
+  + Bắt buộc thêm Giá vé vào form.
+  + Note: "gửi unc trước khi khách đi để booking có hiệu lực - stk nhận tiền 5285678386 techcombank PHAM HOANG PHUC" (hoặc "a/c vui lòng thanh toán UNC luôn để bk có hiệu lực").
+- ĐẠI LÝ THEO DÕI CÔNG NỢ ĐỊNH KỲ:
+  + Đại lý GMN, VPL, BUFFALO, FAMILY HOME, sunlight, Nb FootPrint...
+  + Note: "Thanh toán khi kế toán gửi công nợ ngày theo dõi" (hoặc "a/c vui lòng thanh toán bk khi kế toán gửi công nợ theo ngày").
+  + Giá: có thể để trống hoặc ghi giá đối soát.
+- CÁC TUYẾN CÓ GIÁ CỤ THỂ KHÁC:
+  + Limousine 11c Hạ Long - Ninh Bình: 350k/pax
+  + Bus Ninh Bình - Cát Bà: 170k/pax (hoặc thu khách 250k nếu ghi thu khách 250k)
+  + Taxi Tràng An - NB: 200k
+  + Tour ghép Tràng An - Hang Múa / Hoa Lư: 650k/pax
+  + Sa Pa Cabin 22 phòng: 1.040.000đ
+  + Thu hộ: Ghi rõ số tiền thu hộ (ví dụ: Thu hộ 800k, thu hộ 1tr1, Note thu 350k).
 
 4. CÁC VÍ DỤ MẪU CHUẨN (FEW-SHOT EXAMPLES):
 - Mẫu Tuần Châu (#AAVP9028):

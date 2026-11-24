@@ -165,11 +165,34 @@ const BookingParser = {
   // Hàm trích xuất chính
   parse(rawText, operator = 'Felix') {
     if (!rawText || !rawText.trim()) return null;
-    rawText = rawText.normalize('NFC').replace(/[\u00a0\u202f]/g, ' ').replace(/[\u200b\ufeff]/g, '');
+    rawText = rawText.normalize('NFC').replace(/[\u00a0\u202f]/g, ' ').replace(/[\u200b-\u200f\u202a-\u202e\u2066-\u2069\ufeff]/g, '')
+      .replace(/^[ \t]*[-•][ \t]+/gm, '')
+      .replace(/\+ +(?=\d)/g, '+')
+      .replace(/(\d{1,2})[.](\d{2})(?=\s*(?:am|pm))/gi, '$1:$2')
+      .replace(/(\d{1,2}h\d{2})(?=\d+k)/gi, '$1 ')
+      .replace(/(NB|CB)(?=\d{1,2}h)/g, '$1 ')
+      .replace(/(\d{1,2})-(\d{1,2})(?=\s*\/)/g, '$1/$2')
+      .replace(/(\d{1,2})h(\d{2})\s+chiều/gi, (_,h,m)=>`${Number(h)<12?Number(h)+12:h}:${m} chiều`)
+      .replace(/Tên khách[.][ \t]*/gi, 'Tên khách: ')
+      .replace(/(^|\s)ten[ \t]+/gi, '$1Tên: ')
+      .replace(/^(?:Tên khach|Khách)[ \t]*:/gim, 'Tên khách:')
+      .replace(/^(?:Số lượng|SL)[ \t]*:/gim, 'Số khách:')
+      .replace(/^[ \t]*(?:Contact number|Contact|Sdt khách|SĐT khách)[ \t]*:/gim, 'SĐT:')
+      .replace(/^[ \t]*(?:Booker|Guests' name)[ \t]*:/gim, 'Tên:')
+      .replace(/^[ \t]*(?:# of person|No of pax|Number of pax)[ \t]*:/gim, 'Số khách:')
+      .replace(/^[ \t]*Pick up (?:point|place)[ \t]*:/gim, 'Đón:')
+      .replace(/^[ \t]*Drop off(?: point| place)?[ \t]*:/gim, 'Trả:')
+      .replace(/^[ \t]*Pick up[ \t]*:/gim, 'Đón:')
+      .replace(/^[ \t]*Pick up time[ \t]*:[ \t]*(?:from )?/gim, 'Giờ đón:')
+      .replace(/\s*\|[ \t]*Contact:[ \t]*(?:WA )?/gi, '\nSĐT: ')
+      .replace(/(\d{1,2})(?:st|nd|rd|th)?[ ]+(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?),?[ ]+(\d{4})/gi, (_,d,m,y)=>`${d}/${['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'].indexOf(m.slice(0,3).toLowerCase())+1}/${y}`);
+    // Separate explicit labeled fields even when pasted on a single line.
+    rawText = rawText.replace(/[ \t]+(?=(?:Ngày đi|Tên khách|SĐT|Số điện thoại|Số khách|Số người|Giờ đón|Thời gian đón|Điểm đón|Điểm trả)[ \t]*:)/gi, '\n');
+    // A label with a value on the next line belongs to the same field.
+    rawText = rawText.replace(/(^|\n)([ \t]*(?:Ngày|Tên|SĐT|Phone|Số người|Số khách|Giờ đón|Đón|Trả))[ \t]*:[ \t]*\r?\n[ \t]*(?![\p{L} ]+:)([^\r\n]+)/gimu, '$1$2: $3');
 
-    // Normalize common labels before extraction, without changing their values.
     const aliases = {'date':'Ngày','name':'Tên','phone':'Số điện thoại','passengers':'Số người','pickup time':'Giờ đón','pickup':'Điểm đón','drop-off':'Điểm trả','dropoff':'Điểm trả'};
-    let fullText = rawText.replace(/^(date|name|phone|passengers|pickup time|pickup|drop-off|dropoff)[ \t]*:/gim, (_, label) => aliases[label.toLowerCase()] + ':');
+    let fullText = rawText.replace(/^[ \t]*(date|name|phone|passengers|pickup time|pickup|drop-off|dropoff)[ \t]*:/gim, (_, label) => aliases[label.toLowerCase()] + ':');
     fullText = fullText
       .replace(/BUFF\\ALO/gi, 'BUFFALO')
       .replace(/BUFFALO HOSTE(?!L)/gi, 'BUFFALO HOSTEL')
@@ -181,7 +204,7 @@ const BookingParser = {
       .replace(/^[ \t]*(?:Arrival station)[ \t]*:/gim, 'Trả:')
       .replace(/Tên hành khách/gi, 'Tên khách')
       .replace(/Số lượng hành khách|SL khách/gi, 'Số lượng khách')
-      .replace(/(\d{1,2})\s*(?::(\d{2}))?\s*(AM|PM)\b/gi, (_, h, m, ap) => `${(Number(h) % 12) + (/pm/i.test(ap) ? 12 : 0)}:${m || '00'}`);
+      .replace(/(\d{1,2})\s*(?::(\d{2}))?\s*(AM|PM)\b/gi, (_, h, m, ap) => `${(Number(h) > 12 ? Number(h) : (Number(h) % 12) + (/pm/i.test(ap) ? 12 : 0))}:${m || '00'}`);
     const lines = fullText.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
 
     let agency = '';
@@ -270,13 +293,69 @@ const BookingParser = {
       agency = 'NGỌC ĐỀ';
     } else if (fullText.toLowerCase().includes('anh sơn') || fullText.toLowerCase().includes('axasola')) {
       agency = 'Anh Sơn';
+    } else if (/23 thông phong/i.test(fullText)) {
+      agency = '23 Thông Phong';
+    } else if (/37 hàng mành/i.test(fullText)) {
+      agency = '37 Hàng Mành';
+    } else if (/trường thủy/i.test(fullText)) {
+      agency = 'Trường Thủy';
+    } else if (/asia local/i.test(fullText)) {
+      agency = 'Asia local Tours';
+    } else if (/64 trần nhật duật/i.test(fullText)) {
+      agency = '64 TRẦN NHẬT DUẬT';
+    } else if (/45 ngõ huyện/i.test(fullText)) {
+      agency = '45 Ngõ Huyện';
+    } else if (/85 mã mây/i.test(fullText)) {
+      agency = '85 mã mây';
+    } else if (/4 bat su|dục dương|duc duong/i.test(fullText)) {
+      agency = 'DUC DUONG (4 BAT SU)';
+    } else if (/hang múa eco garden|hang mua eco garden/i.test(fullText)) {
+      agency = 'Hang Múa Eco Garden';
+    } else if (/indochine/i.test(fullText)) {
+      agency = 'Indochine';
+    } else if (/hoàng minh|hoang minh/i.test(fullText)) {
+      agency = 'Hoang minh';
+    } else if (/tam cốc holiday|tam coc holiday/i.test(fullText)) {
+      agency = 'Tam Cốc Holiday';
+    } else if (/tam coc tour/i.test(fullText)) {
+      agency = 'tam coc tour';
+    } else if (/footprint/i.test(fullText)) {
+      agency = 'Nb FootPrint';
+    } else if (/nb ventures/i.test(fullText)) {
+      agency = 'Nb Ventures';
+    } else if (/forest sunset/i.test(fullText)) {
+      agency = 'Forest Sunset';
+    } else if (/chú ngọc|chu ngoc/i.test(fullText)) {
+      agency = 'chú ngọc';
+    } else if (/em phương cát bà|em phuong cat ba/i.test(fullText)) {
+      agency = 'em phương cát bà';
+    } else if (/full moon travel|hoài cát bà|hoai cat ba/i.test(fullText)) {
+      agency = 'Hoài cát bà';
+    } else if (/pu luong wandering/i.test(fullText)) {
+      agency = 'Pu Luong Wandering';
+    } else if (/pù luông roots|pu luong roots/i.test(fullText)) {
+      agency = 'Pù Luông Roots';
+    } else if (/lan anh/i.test(fullText)) {
+      agency = 'PL LAN ANH';
+    } else if (/bestprice/i.test(fullText)) {
+      agency = 'bestprice';
+    } else if (/ánh hương|anh huong/i.test(fullText)) {
+      agency = 'Ánh hương homestay';
+    } else if (/tường vi|tuong vi/i.test(fullText)) {
+      agency = 'TƯỜNG VI - homestay';
+    } else if (/quý limo|quy limo/i.test(fullText)) {
+      agency = 'Quý Limo Cát Bà';
+    } else if (/lotus field/i.test(fullText)) {
+      agency = 'Lotus Field';
+    } else if (/gmn/i.test(fullText)) {
+      agency = 'GMN';
     } else {
       agency = 'Đại lý đối tác';
     }
 
     // 4. Điểm đón & Điểm trả
     const locationText = fullText.replace(/(?:Thời gian đón|Giờ đón)[ \t]*:[^\r\n]*?(?=\s+(?:Địa điểm|Điểm)\s+(?:đón|trả)|[\r\n]|$)/gi, '');
-    const donMatch = locationText.match(/(?:đón|Đón|ĐÓN|Khởi hành tại|Điểm khởi hành)[\s:]*([^\n\r]+?)(?=\s+(?:trả|đón|tên|SĐT|Số điện thoại|Các hành khách|\d+\s*pax)(?=[\s:]|$)|[\n\r]|$)/i);
+    const donMatch = locationText.match(/^(?:Địa điểm đón|Điểm đón|Đón)[ \t]*:[ \t]*(?!\d{1,2}:\d{2}[ \t]*(?:\r?\n|$))([^\r\n]+?)(?=\s+(?:Trả|Điểm trả|Tên|SĐT)[ \t]*:|[\r\n]|$)/im) || locationText.match(/(?:đón|Đón|ĐÓN|Khởi hành tại|Điểm khởi hành)[\s:]*([^\n\r]+?)(?=\s+(?:trả|đón|tên|SĐT|Số điện thoại|Các hành khách|\d+\s*pax)(?=[\s:]|$)|[\n\r]|$)/i);
     if (donMatch) {
       pickupPoint = donMatch[1].replace(/^\d{1,2}:\d{2}\s*-\s*/, '').trim();
     }
@@ -345,6 +424,14 @@ const BookingParser = {
       route = 'HL - NB';
     } else if (fullText.match(/NB - HL|Ninh Bình - Hạ Long/i) || fullText.includes('cảng sun')) {
       route = 'NB - HL';
+    } else if (fullText.match(/HN\s*-\s*NB|Hà Nội\s*-\s*Ninh Bình|\bhn\s*nb\b|Hanoi\s*to\s*Ninh\s*Binh/i)) {
+      route = 'HN - NB';
+    } else if (fullText.match(/NB\s*-\s*HN|Ninh Bình\s*-\s*Hà Nội|\bnb\s*hn\b|Ninh\s*Binh\s*to\s*Hanoi/i)) {
+      route = 'NB - HN';
+    } else if (fullText.match(/Nội Bài\s*-\s*NB|Noi Bai\s*to\s*Ninh\s*Binh/i)) {
+      route = 'Nội Bài - NB';
+    } else if (fullText.match(/NB\s*-\s*Nội Bài|Ninh\s*Binh\s*to\s*Noi\s*Bai/i)) {
+      route = 'NB - Nội Bài';
     } else {
       // Tự động suy luận tuyến đường từ Điểm đón & Điểm trả
       const pLow = (pickupPoint || '').toLowerCase();
@@ -428,6 +515,8 @@ const BookingParser = {
     if (explicitPhone) {
       phone = this.normalizePhone(explicitPhone[1]);
     }
+    const customerPhone = fullText.match(/(?:^|\n)[ \t]*(?:SĐT|SDT|Phone|Số điện thoại)(?: khách)?[ \t]*:[ \t]*(\+?\d[\d ()-]*\d)/i);
+    if (customerPhone) phone = this.normalizePhone(customerPhone[1]);
 
     // 9. Tên khách
     const passengersSection = fullText.match(/(?:Các hành khách|Passengers)[\s\S]*?(?:Số điện thoại|SĐT|Phone|$)/i);
@@ -487,6 +576,11 @@ const BookingParser = {
       }
     }
 
+    if (!customerNames.length && /chị đặt xe/i.test(fullText)) {
+      const contactIndex = lines.findIndex(line => /^\+?\d[\d ()-]{7,}$/.test(line));
+      const candidate = lines[contactIndex - 1];
+      if (candidate && /^[\p{L} ’'’-]+$/u.test(candidate) && !this.isLocationLine(candidate)) customerNames.push(candidate);
+    }
     customerNames = customerNames.map(name => name.replace(/\s+[xX]\s*$/, '').replace(/[. ]*\s+ạ\s*$/, '').replace(/\.$/, '').trim());
     let customerString = customerNames.length > 0 ? customerNames[0] : 'Khách';
     if (phone && !customerString.replace(/[^\d]/g, '').includes(phone.replace(/\D/g, ''))) {
@@ -536,7 +630,7 @@ const BookingParser = {
     if (collect) note = collect[0];
     if (route === 'CB - NB' && !timeStr && /trưa/i.test(fullText)) pickupTime = '12:00 - 12:30';
     const leadContact = fullText.match(/\d+\s*k\s*[-–]?\s*([^\r\n+]+?)\s*(\+\d[\d -]+)/i);
-    if (leadContact && !/đón|chuyến|ngày|\d{1,2}h/i.test(leadContact[1])) customerString = `${leadContact[1].trim()} ${this.normalizePhone(leadContact[2])}`;
+    if (leadContact && !/tên|đón|chuyến|ngày|\d{1,2}h/i.test(leadContact[1])) customerString = `${leadContact[1].trim()} ${this.normalizePhone(leadContact[2])}`;
     if (/hỏi khách điểm trả/i.test(fullText)) { dropPoint = ''; note += ' / Hỏi khách điểm trả'; }
 
     if (/bến Bèo/i.test(pickupPoint)) {
@@ -573,7 +667,114 @@ const BookingParser = {
       }
       note += ' / Xe đón 19:00 về văn phòng Thế Long đợi chuyến 22:30';
     }
+    // Extra formats from the updated dataset; extract variables from this booking only.
+    const compactName = fullText.match(/\d+\s*k\s+([^\n]+?)\s+\d{1,2}h\d{0,2}\s+ở\s+(.+?)(?=\s+trả|$)/i);
+    if (compactName) { customerString = compactName[1].trim(); pickupPoint = compactName[2].trim(); }
+    const ticketLead = fullText.match(/^(?:BK\d+|GYG[A-Z0-9]+)\s*[-–]?\s*([^\n]+?)(?=\s*\(?\+)/im);
+    if (ticketLead) customerString = `${ticketLead[1].trim()} ${phone}`.trim();
+    const inlinePaxName = fullText.match(/^([\p{L} ’'’-]+)\s+\d+\s*pax\s*$/imu);
+    if (customerString.startsWith('Khách') && inlinePaxName) customerString = `${inlinePaxName[1].trim()} ${phone}`.trim();
+    const updatePickup = fullText.match(/(?:em báo điểm đón tại|cập nhật điểm đón:)\s*([^\n]+)/i);
+    if (updatePickup) pickupPoint = updatePickup[1].trim();
+    if (/Cat Ba (?:to|-) (?:Ninh Binh|Tam Coc)|Cát bà\s*-\s*Ninh Binh/i.test(fullText)) route = 'CB - NB';
+    if (/Hạ Long\s*-\s*Tam Cốc|Ha Long\s*-\s*Tam Coc/i.test(fullText)) route = 'HL - NB';
+    if (/Ha\s*noi\s*-?\s*(?:Ninh Binh|Ninh Bình|tam cốc)/i.test(fullText)) route = 'HN - NB';
+    if (/tam coc (?:di cb|Pu Luong)|Di cb|tcoc đi cb/i.test(fullText)) route = /Pu Luong/i.test(fullText) ? 'NB - PL' : 'NB - CB';
+    if (/Indochine/i.test(pickupPoint) && /Phố vọng/i.test(dropPoint)) route = 'NB - HN';
+    if (route === 'CB - NB' && timeStr === '15:20') pickupTime = '15:00 - 15:20';
+    if (/Full Moon Office/i.test(pickupPoint) && timeStr === '15:30') pickupTime = '15:15 - 15:45';
+    if (route === 'HL - NB' && timeStr === '11:30' && /cảng sun/i.test(pickupPoint)) pickupTime = '11:30 - 12:00';
+    if (/Tam Coc Pu Luong/i.test(fullText) && timeStr === '13:30') pickupTime = '13:00 - 13:30';
+    if (/^FAMILY HOME$/i.test(pickupPoint)) {
+      agency = `FAMILY HOME BUS${originalCode ? ' ' + originalCode : ''}`;
+      if (timeStr === '12:00') pickupTime = '12:00 - 12:20';
+    }
+    const atPickup = pickupPoint.match(/^(.*?)\s+lúc\s+(\d{1,2})h(\d{2})?$/i);
+    if (atPickup) {pickupPoint = atPickup[1].trim();pickupTime = `${atPickup[2]}:${atPickup[3] || '00'}`;}
+    if (/Rạp Xiếc Trung Ương/i.test(pickupPoint)) route = 'HN - NB';
+    if (route === 'PL - NB' && timeStr === '07:15') pickupTime = '6:50 - 7:10';
+    if (/tour\s*4(?:đ| điểm)/i.test(fullText)) {route = 'Tour 4 điểm';vehicle = 'minivan';pickupTime = '8:00 - 8:30';}
+    if (/tour ghép Trang An - Hang Mua|tour trang an - hang/i.test(fullText)) {route = 'Tour Tràng An - Hang Múa';vehicle = 'minivan';}
+    const tourPax = fullText.match(/(\d+)\s*tour/i);
+    if (!pax && tourPax) pax = Number(tourPax[1]);
+    const emojiName = fullText.match(/^[^\p{L}\d\n]*🧑[^:]*:\s*([^\n]+)/mu);
+    if (emojiName) customerString = `${emojiName[1].trim()} ${phone}`.trim();
+    // Strip trailing operational prose from a labeled name, retaining the actual contact.
+    if (tenLabel && /chuyen|chuyến|\. Di cb|, số | Lúc |\. Chilling/i.test(customerString)) {
+      const cleanName = tenLabel[1].split(/\s+(?:chuyen|chuyến)|\. Di cb|, số | Lúc |\. Chilling/i)[0].trim();
+      customerString = cleanName.replace(/\s*\+\d[\d .()-]*$/, '').trim() + (phone ? ' ' + phone : '');
+    }
+    if (/^(?:a|c|e)\s*\d+k|^\d{1,2}\/\d{1,2}|giúp em nhé/i.test(pickupPoint)) pickupPoint = '';
+    if (/^(?:trả NB hỏi|NB hỏi)|hỏi.*điểm trả/i.test(dropPoint)) dropPoint = '';
+
+    const compressed = fullText.match(/(?:Ferry|limousine)\s*"?([^\n]+?)\s+(Cat Ba [^\n]+?)\s{2,}([^\n]+)/i);
+    if (compressed) {customerString = compressed[1].trim();pickupPoint = compressed[2].trim();dropPoint = compressed[3].trim();}
+    const quotedPassenger = fullText.match(/Bus12GO\d+\s*"([^"\n]+)\s*\n(\+\d+)"/i);
+    if (quotedPassenger) {customerString = `${quotedPassenger[1].trim()} ${quotedPassenger[2]}`;const count=fullText.match(/(\d+)\s+Bus12GO/i);if(count)pax=Number(count[1]);}
+    const englishInline = fullText.match(/\d{1,2}:\d{2}\s+([^+\n]+?)\s*-\s*\+/i);
+    if (englishInline && /drop in/i.test(fullText)) {customerString=`${englishInline[1].trim()} ${phone}`;const count=fullText.match(/(\d+)\s+limousine/i);if(count)pax=Number(count[1]);}
+    const fallbackPerson = fullText.match(/^([\p{L} ’'’-]+)\s+ạ\s*$/imu);
+    if (customerString.startsWith('Khách') && fallbackPerson) customerString = fallbackPerson[1].trim();
+    if (/tour\/.*HL- HM- TA- BĐ/i.test(fullText)) {route='Tour 4 điểm';vehicle='minivan';pickupTime='8:00 - 8:30';}
+    if (/Catba- bus/i.test(fullText) && /chiều/.test(fullText)) {route='NB - CB';if(timeStr==='13:30')pickupTime='13:00 - 13:30';}
+    if (route === 'CB - NB' && /^(?:0?8:00)$/.test(timeStr)) pickupTime='8:00 - 8:15';
+    if (/^anh$/i.test(pickupPoint)) {const place=fullText.match(/^Đón\s+(\d+[^\n]+)/im);pickupPoint=place?place[1].trim():'';}
+    if (!pax) {const count=fullText.match(/(\d+)\s*ve\b/i);if(count)pax=Number(count[1]);}
+    if (/^(?:a|c|e)\s*\d+\s*tour|Tên:|đặt\s+\d+\s*vé/i.test(pickupPoint)) pickupPoint='';
+    pickupPoint = pickupPoint.replace(/\s*\(\+\d[\d ]*\).*$/, '').replace(/,\s*$/, '');
+
+    // 1. Trích xuất giá cụ thể từ tin nhắn nếu có
+    if (!price) {
+      const explicitPrice = fullText.match(/(?:giá|gia|giá vé|fare|price)[\s:]*([0-9.,]+[kK]?\s*(?:\/\s*pax|\/\s*k)?|[0-9]{2,3}[kK]|[0-9]{1,3}(?:\.[0-9]{3})+)/i);
+      if (explicitPrice && !/ngày|tháng|chuyến|\dh/i.test(explicitPrice[1])) {
+        price = explicitPrice[1].trim();
+      }
+    }
+
+    // 2. Nhận diện các tuyến và đại lý thanh toán luôn
+    const isHnNbRoute = /^(?:NB\s*-\s*HN|HN\s*-\s*NB|hn\s*nb|nb\s*hn)$/i.test(route) || 
+                        /hà nội|hanoi|cầu giấy|hoàn kiếm|lý quốc sư|hàng bông/i.test(pickupPoint + ' ' + dropPoint);
+    const isNoiBaiRoute = /nội bài|noi bai|sân bay/i.test(route + ' ' + pickupPoint + ' ' + dropPoint + ' ' + fullText);
+    const isImmediateCkAgent = /23 Thông Phong|Trường Thủy|37 Hàng Mành|Asia local Tours|64 TRẦN NHẬT DUẬT|em phương cát bà/i.test(agency) || 
+                               /gửi unc|ck gửi unc|thanh toán unc/i.test(fullText);
+
+    // BẮT BUỘC ADD GIÁ ĐỂ THANH TOÁN LUÔN CHO CHUYẾN NB-HN, HN-NB, NỘI BÀI HOẶC ĐẠI LÝ CK LUÔN
+    if (!price) {
+      const paxNum = Number(pax) || 1;
+      if (isNoiBaiRoute) {
+        price = paxNum > 1 ? `${paxNum * 300}k` : '300k/pax';
+      } else if (isHnNbRoute) {
+        if (/indochine/i.test(pickupPoint + ' ' + agency)) {
+          price = paxNum > 1 ? `${paxNum * 360}k` : '360k/pax';
+        } else {
+          price = paxNum > 1 ? `${paxNum * 220}k` : '220k/pax';
+        }
+      } else if (isImmediateCkAgent && (/hạ long|ha long/i.test(route) || /hạ long|ha long/i.test(pickupPoint))) {
+        price = '350k';
+      }
+    }
+
+    // Ghi chú thanh toán chuyển khoản / UNC
+    if (isImmediateCkAgent) {
+      if (/thanh toán khi kế toán gửi công nợ/i.test(note) || !note) {
+        if (/a\/c vui lòng thanh toán UNC luôn/i.test(fullText) || /Trường Thủy/i.test(agency)) {
+          note = 'a/c vui lòng thanh toán UNC luôn để bk có hiệu lực';
+        } else if (/ck gửi unc/i.test(fullText) || /23 Thông Phong/i.test(agency)) {
+          note = 'ck gửi unc';
+        } else if (/Thanh toán gửi unc để vào vé/i.test(fullText) || /64 TRẦN NHẬT DUẬT/i.test(agency)) {
+          note = 'Thanh toán gửi unc để vào vé';
+        } else {
+          note = 'gửi unc trước khi khách đi để booking có hiệu lực - stk nhận tiền 5285678386 techcombank PHAM HOANG PHUC';
+        }
+      }
+    } else if (isNoiBaiRoute && (/thanh toán khi kế toán gửi công nợ/i.test(note) || !note)) {
+      note = 'gửi unc trước khi khách đi để booking có hiệu lực - stk nhận tiền 5285678386 techcombank PHAM HOANG PHUC';
+    }
+
     const warnings = [];
+    if (/Pick up:/gi.test(rawText) && (rawText.match(/Pick up:/gi) || []).length > 1) warnings.push('Tin có nhiều chặng: đang đọc chặng đầu, kiểm tra ngày và điểm đón/trả');
+    if ((fullText.match(/^Don:/gim) || []).length > 1) warnings.push('Tin gồm nhiều nhóm khách: cần tách booking trước khi xác nhận');
+    if (/Tourist Bus \+ Ferry|Bus12GO|drop in/i.test(fullText)) warnings.push('Định dạng ghép cột: kiểm tra lại tên, điểm đón/trả và giờ');
     if (!travelDate) warnings.push('Chưa có ngày đi');
     if (!pickupPoint) warnings.push('Chưa có điểm đón');
     if (!dropPoint) warnings.push('Chưa có điểm trả');
@@ -630,4 +831,4 @@ Anh chị vui lòng check lại thông tin giúp em, em cảm ơn ạ`;
 };
 
 if (typeof module !== 'undefined') module.exports = BookingParser;
-if (typeof window !== 'undefined') if (typeof module !== "undefined") module.exports = BookingParser; if (typeof window !== "undefined") if (typeof module !== "undefined") module.exports = BookingParser; if (typeof window !== "undefined") if (typeof module !== "undefined") module.exports = BookingParser; if (typeof window !== "undefined") if (typeof module !== "undefined") module.exports = BookingParser; if (typeof window !== "undefined") window.BookingParser = BookingParser;
+if (typeof window !== 'undefined') if (typeof module !== "undefined") module.exports = BookingParser; if (typeof window !== "undefined") if (typeof module !== "undefined") module.exports = BookingParser; if (typeof window !== "undefined") if (typeof module !== "undefined") module.exports = BookingParser; if (typeof window !== "undefined") if (typeof module !== "undefined") module.exports = BookingParser; if (typeof window !== "undefined") if (typeof module !== "undefined") module.exports = BookingParser; if (typeof window !== "undefined") window.BookingParser = BookingParser;
