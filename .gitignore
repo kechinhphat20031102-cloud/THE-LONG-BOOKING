@@ -1,0 +1,22 @@
+# SQLite database & backups
+data/*.sqlite
+backups/
+*.sqlite
+
+# Python
+__pycache__/
+*.pyc
+
+# Logs & temp
+*.log
+server-error.log
+
+# Vercel
+.vercel
+
+# Node
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db

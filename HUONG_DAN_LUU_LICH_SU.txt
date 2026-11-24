@@ -1,0 +1,24 @@
+LỊCH SỬ BOOKING LOCAL — SQLITE
+
+1. Chạy Mo_Web_Dieu_Hanh.bat. Trang mở tại http://127.0.0.1:8765/.
+2. Tạo form, sửa, bấm Sao chép Zalo. Kiểm tra dòng "Đã lưu vào data/bookings.sqlite".
+3. F5 hoặc mở lại ứng dụng: lịch sử được tải từ SQLite. Chọn Ngày xác nhận để xem ngày cũ.
+
+CHUYỂN LỊCH SỬ CŨ (không xóa dữ liệu cũ)
+- Trong đúng trình duyệt đã dùng trước đây, mở index.html trực tiếp và tải lại.
+- Bấm Xuất lịch sử / bản sao, lưu file JSON.
+- Chạy file .bat, vào trang localhost; bấm Nhập lịch sử cũ và chọn file JSON.
+- Kiểm tra các ngày/cuốc đã nhập. Có thể nhập lại cùng file mà không nhân đôi cuốc.
+- Mẫu học và API Key vẫn là cài đặt riêng của trình duyệt/địa chỉ trang; tính năng này chỉ chuyển lịch sử booking.
+
+VỊ TRÍ
+- data/bookings.sqlite: dữ liệu chính. Không sửa trực tiếp bằng trình soạn code.
+- backups/bookings-*.sqlite: tự sao lưu trước mỗi lần thay đổi, giữ 30 bản gần nhất.
+- Xuất lịch sử / bản sao: tải JSON từ trạng thái trang, hữu ích nếu server đang lỗi.
+- server-error.log: lỗi khởi động nếu có.
+
+KHÔI PHỤC
+Dừng tiến trình local_server.py trước, giữ lại file SQLite hiện tại, rồi chép bản sao trong backups thành data/bookings.sqlite. Khởi động lại bằng file .bat.
+
+Nếu hai tab cùng sửa, server sẽ từ chối ghi đè phiên bản cũ. Xuất bản sao tab bị lỗi trước khi tải lại rồi nhập file để giữ các cuốc cần thiết. Nhập lịch sử hợp nhất, không xóa dữ liệu hiện tại.
+Server chỉ lắng nghe trên máy này (127.0.0.1), không mở ra mạng LAN. Không cần cài thư viện Python bổ sung.

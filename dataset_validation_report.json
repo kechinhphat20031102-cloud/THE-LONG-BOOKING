@@ -1,0 +1,481 @@
+{
+  "source": "DATA SET.docx",
+  "samples": 41,
+  "assertionsPassed": 174,
+  "fullMatch": 18,
+  "results": [
+    {
+      "id": 1,
+      "differences": [],
+      "warnings": []
+    },
+    {
+      "id": 2,
+      "differences": [
+        {
+          "field": "travelDate",
+          "expected": "23/11/2026",
+          "actual": ""
+        },
+        {
+          "field": "customerString",
+          "expected": "",
+          "actual": "Khách"
+        },
+        {
+          "field": "pickupTime",
+          "expected": "15h10",
+          "actual": "15:10"
+        },
+        {
+          "field": "dropPoint",
+          "expected": "",
+          "actual": "4pax về bích động; 1pax trả  Si Grand Hotel"
+        }
+      ],
+      "warnings": [
+        "Chưa có ngày đi",
+        "Chưa có tên khách"
+      ]
+    },
+    {
+      "id": 3,
+      "differences": [],
+      "warnings": []
+    },
+    {
+      "id": 4,
+      "differences": [],
+      "warnings": []
+    },
+    {
+      "id": 5,
+      "differences": [
+        {
+          "field": "pickupPoint",
+          "expected": "228 1/4",
+          "actual": ""
+        },
+        {
+          "field": "dropPoint",
+          "expected": "the long",
+          "actual": ""
+        }
+      ],
+      "warnings": [
+        "Chưa có điểm đón",
+        "Chưa có điểm trả"
+      ]
+    },
+    {
+      "id": 6,
+      "differences": [],
+      "warnings": []
+    },
+    {
+      "id": 7,
+      "differences": [],
+      "warnings": [
+        "Chưa có điểm trả"
+      ]
+    },
+    {
+      "id": 8,
+      "differences": [
+        {
+          "field": "pickupPoint",
+          "expected": "Cát Bà",
+          "actual": ""
+        },
+        {
+          "field": "dropPoint",
+          "expected": "Ninh Bình",
+          "actual": ""
+        }
+      ],
+      "warnings": [
+        "Chưa có điểm đón",
+        "Chưa có điểm trả"
+      ]
+    },
+    {
+      "id": 9,
+      "differences": [],
+      "warnings": []
+    },
+    {
+      "id": 10,
+      "differences": [],
+      "warnings": []
+    },
+    {
+      "id": 11,
+      "differences": [
+        {
+          "field": "customerString",
+          "expected": "johann +43 664 4112015",
+          "actual": "Khách +436644112015"
+        },
+        {
+          "field": "pickupTime",
+          "expected": "7h45 8h",
+          "actual": "7:45 - 8:00"
+        },
+        {
+          "field": "dropPoint",
+          "expected": "the long",
+          "actual": ""
+        }
+      ],
+      "warnings": [
+        "Chưa có điểm trả",
+        "Chưa có tên khách"
+      ]
+    },
+    {
+      "id": 12,
+      "differences": [],
+      "warnings": []
+    },
+    {
+      "id": 13,
+      "differences": [],
+      "warnings": []
+    },
+    {
+      "id": 14,
+      "differences": [
+        {
+          "field": "dropPoint",
+          "expected": "BÁO SAU",
+          "actual": ""
+        }
+      ],
+      "warnings": [
+        "Chưa có điểm trả"
+      ]
+    },
+    {
+      "id": 15,
+      "differences": [],
+      "warnings": []
+    },
+    {
+      "id": 16,
+      "differences": [],
+      "warnings": []
+    },
+    {
+      "id": 17,
+      "differences": [
+        {
+          "field": "pickupPoint",
+          "expected": "The Long Hotel",
+          "actual": ""
+        }
+      ],
+      "warnings": [
+        "Chưa có điểm đón"
+      ]
+    },
+    {
+      "id": 18,
+      "differences": [
+        {
+          "field": "pickupPoint",
+          "expected": "Hoang minh",
+          "actual": ""
+        },
+        {
+          "field": "dropPoint",
+          "expected": "Hoang minh",
+          "actual": ""
+        }
+      ],
+      "warnings": [
+        "Chưa có điểm đón",
+        "Chưa có điểm trả"
+      ]
+    },
+    {
+      "id": 19,
+      "differences": [
+        {
+          "field": "dropPoint",
+          "expected": "La Mai Chau Home",
+          "actual": "La Mai Chau Home - M34C+6PP, Nà Chiềng, Mai Châu, Phú Thọ 36400, Viêt @Kế Toán Việt Nam Easy Go Travel"
+        }
+      ],
+      "warnings": []
+    },
+    {
+      "id": 20,
+      "differences": [
+        {
+          "field": "dropPoint",
+          "expected": "NINH BINH",
+          "actual": ""
+        }
+      ],
+      "warnings": [
+        "Chưa có điểm trả"
+      ]
+    },
+    {
+      "id": 21,
+      "differences": [
+        {
+          "field": "pickupTime",
+          "expected": "12:20 - 12:40",
+          "actual": "12:00 - 12:30"
+        },
+        {
+          "field": "dropPoint",
+          "expected": "the long",
+          "actual": ""
+        }
+      ],
+      "warnings": [
+        "Chưa có điểm trả"
+      ]
+    },
+    {
+      "id": 22,
+      "differences": [
+        {
+          "field": "pickupPoint",
+          "expected": "Lô 27B, Cảng tàu Tuần Châu",
+          "actual": "Lô 27B, Cảng tàu Tuần Châu, Phường Tuần Châu, Quảng Ninh."
+        }
+      ],
+      "warnings": []
+    },
+    {
+      "id": 23,
+      "differences": [
+        {
+          "field": "pickupPoint",
+          "expected": "Lotus Field",
+          "actual": ""
+        },
+        {
+          "field": "dropPoint",
+          "expected": "Pù Luông",
+          "actual": ""
+        }
+      ],
+      "warnings": [
+        "Chưa có điểm đón",
+        "Chưa có điểm trả"
+      ]
+    },
+    {
+      "id": 24,
+      "differences": [
+        {
+          "field": "dropPoint",
+          "expected": "NINH BINH",
+          "actual": ""
+        }
+      ],
+      "warnings": [
+        "Chưa có điểm trả"
+      ]
+    },
+    {
+      "id": 25,
+      "differences": [
+        {
+          "field": "dropPoint",
+          "expected": "NINH BINH",
+          "actual": ""
+        }
+      ],
+      "warnings": [
+        "Chưa có điểm trả"
+      ]
+    },
+    {
+      "id": 26,
+      "differences": [
+        {
+          "field": "pickupTime",
+          "expected": "12:20 - 12:40",
+          "actual": "12:00 - 12:30"
+        },
+        {
+          "field": "dropPoint",
+          "expected": "the long",
+          "actual": ""
+        }
+      ],
+      "warnings": [
+        "Chưa có điểm trả"
+      ]
+    },
+    {
+      "id": 27,
+      "differences": [],
+      "warnings": [
+        "Chưa có điểm trả"
+      ]
+    },
+    {
+      "id": 28,
+      "differences": [],
+      "warnings": [
+        "Chưa có điểm trả"
+      ]
+    },
+    {
+      "id": 29,
+      "differences": [
+        {
+          "field": "pickupTime",
+          "expected": "15:20 - 15:40",
+          "actual": "15:00 - 15:30"
+        },
+        {
+          "field": "dropPoint",
+          "expected": "the long",
+          "actual": ""
+        }
+      ],
+      "warnings": [
+        "Chưa có điểm trả",
+        "Dataset có hai giờ đón chuyến 15:30; đang dùng 15:00 - 15:30, cần kiểm tra"
+      ]
+    },
+    {
+      "id": 30,
+      "differences": [
+        {
+          "field": "pickupTime",
+          "expected": "7:45 - 8:15",
+          "actual": "8:00 - 8:15"
+        }
+      ],
+      "warnings": [
+        "Chưa có điểm trả",
+        "Dataset hẹn từ 7:45; quy tắc cũ từ 8:00. Cần xác nhận giờ đón"
+      ]
+    },
+    {
+      "id": 31,
+      "differences": [
+        {
+          "field": "dropPoint",
+          "expected": "Ninh Bình",
+          "actual": ""
+        }
+      ],
+      "warnings": [
+        "Chưa có điểm trả",
+        "Dataset có hai giờ đón chuyến 15:30; đang dùng 15:00 - 15:30, cần kiểm tra"
+      ]
+    },
+    {
+      "id": 32,
+      "differences": [
+        {
+          "field": "pickupPoint",
+          "expected": "Hoang minh",
+          "actual": ""
+        },
+        {
+          "field": "dropPoint",
+          "expected": "Hoang minh",
+          "actual": ""
+        }
+      ],
+      "warnings": [
+        "Chưa có điểm đón",
+        "Chưa có điểm trả"
+      ]
+    },
+    {
+      "id": 33,
+      "differences": [
+        {
+          "field": "pickupPoint",
+          "expected": "Hoang Minh Villa",
+          "actual": "home (cần địa chỉ)"
+        }
+      ],
+      "warnings": []
+    },
+    {
+      "id": 34,
+      "differences": [
+        {
+          "field": "route",
+          "expected": "Home - Sa Pa (chuyến 22h30)",
+          "actual": "NB - SAPA"
+        },
+        {
+          "field": "pickupTime",
+          "expected": "đi chuyến 10h30 đón về vp là lúc 7h pm",
+          "actual": "19:00 (về văn phòng, chuyến 22:30)"
+        }
+      ],
+      "warnings": []
+    },
+    {
+      "id": 35,
+      "differences": [],
+      "warnings": []
+    },
+    {
+      "id": 36,
+      "differences": [],
+      "warnings": []
+    },
+    {
+      "id": 37,
+      "differences": [
+        {
+          "field": "pickupPoint",
+          "expected": "Ha Long Happy Travel",
+          "actual": "Ha Long Happy Travel Tuan Chau"
+        }
+      ],
+      "warnings": []
+    },
+    {
+      "id": 38,
+      "differences": [],
+      "warnings": []
+    },
+    {
+      "id": 39,
+      "differences": [],
+      "warnings": []
+    },
+    {
+      "id": 40,
+      "differences": [
+        {
+          "field": "pickupTime",
+          "expected": "12:20 - 12:40",
+          "actual": "12:00 - 12:30"
+        },
+        {
+          "field": "dropPoint",
+          "expected": "the long",
+          "actual": ""
+        }
+      ],
+      "warnings": [
+        "Chưa có điểm trả"
+      ]
+    },
+    {
+      "id": 41,
+      "differences": [],
+      "warnings": [
+        "Chưa có điểm trả",
+        "Dataset có hai giờ đón chuyến 15:30; đang dùng 15:00 - 15:30, cần kiểm tra"
+      ]
+    }
+  ]
+}

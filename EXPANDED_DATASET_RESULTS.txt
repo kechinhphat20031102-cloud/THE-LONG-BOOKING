@@ -1,0 +1,35 @@
+BỘ 1.000 MẪU MỞ RỘNG CHO LOCAL
+
+Nguồn: DATA SET.docx, các mẫu 14, 12, 10, 9, 13, 15, 16, 6, 18, 37.
+Đáp án được khai báo độc lập trong generate_expanded_dataset.js từ các quy tắc nguồn, không lấy kết quả parser làm đáp án.
+Tất cả booking, tên và điện thoại trong bộ mở rộng là dữ liệu thử tổng hợp, không phải booking thật.
+
+Phạm vi: 10 nhóm mẫu x 100 biến thể = 1.000 tin khác nhau.
+Biến thể gồm tên Việt/Âu, chữ thường, dấu nháy, số khách 1–8, ngày/tháng/năm, điện thoại có dấu cách, mã vé, CRLF/LF, dòng trống, thụt đầu dòng, khoảng trắng không ngắt dòng, tiêu đề bảng, AM/PM và h.
+800 mẫu development dùng để tìm lỗi. 200 mẫu validation đã cố định từ lúc tạo, chỉ chạy sau khi sửa trên development.
+Các mẫu validation vẫn dùng cùng nhóm cấu trúc; không phải 200 kiểu đại lý hoàn toàn mới.
+
+Kết quả:
+- Trước sửa: 620/800 mẫu development khớp đủ 7 trường.
+- Sau sửa: 800/800 development, 200/200 validation khớp đủ 7 trường.
+- 7 trường: ngày đi, số khách, tên/điện thoại, tuyến, giờ đón, điểm đón, điểm trả.
+- Không chấm đầy đủ giá, đại lý, loại xe, note hoặc mọi quy tắc kinh doanh trong bộ này.
+- 64 trường hợp kiểm thử cũ vẫn đạt; 174 kiểm tra từ dataset gốc vẫn đạt.
+- Dataset gốc vẫn chỉ có 18/41 mẫu khớp đủ 7 trường; các mâu thuẫn/thiếu ngữ cảnh chưa được che giấu bằng số liệu tổng hợp.
+
+Những sửa đổi đã đưa vào parser.js:
+1. Chuẩn hóa Unicode và khoảng trắng đặc biệt trước khi đọc trường.
+2. Nhận Departure/Arrival station kể cả khi thụt đầu dòng.
+3. Đọc tên người đại diện theo vị trí sau dòng Adult: n pax, không phụ thuộc viết hoa hoặc tên đã biết.
+
+Đây là cải tiến bộ quy tắc local, không huấn luyện một mô hình AI và không đưa 1.000 khách giả vào kho mẫu thật/SQLite.
+Không thể suy ra độ chính xác trên booking thực tế từ tỷ lệ 100% của các mẫu tổng hợp cùng cấu trúc.
+Các trường thiếu nguồn hoặc quy tắc mâu thuẫn vẫn cần người điều hành kiểm tra.
+
+Tái hiện:
+node generate_expanded_dataset.js
+node test_expanded_dataset.js development
+node test_expanded_dataset.js validation
+node test_regressions.js
+node test_booking_matrix.js
+node test_dataset.js

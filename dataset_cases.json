@@ -1,0 +1,576 @@
+[
+  {
+    "id": 1,
+    "raw": "chị đặt xe :  chuyến 20h /  ngày  23 tháng 11 /  1 khách /  đón Hang Múa Eco Garden/  trả công viên cầu giấy /  Hoàng Xuân Vinh/  0385 661 539",
+    "form": "Thế Long Travel xác nhận booking\nĐại lý : Hang Múa Eco Garden\nCode : tl231126\nNgày đi : 23/11/2026\nLịch trình : NB - HN\nLoại xe : limosine \nSố lượng khách : 1\nTên khách : Hoàng Xuân Vinh 0385 661 539\nGiờ đón : 19:45 - 20:15\nĐiểm đón : Hang Múa Eco Garden\nĐiểm trả : công viên cầu giấy\nGiá : 220k/pax\nNote : Thanh toán khi kế toán gửi công nợ ngày theo dõi\nLưu ý : Các điểm bao gồm đón bên em hẹn đón theo thời gian quy định đã hẹn nếu khách không chuẩn bị kịp thì đại lí báo khách tự đến văn phòng hộ bên e\nlong  xác nhận booking\nAnh chị vui lòng check lại thông tin giúp em, em cảm ơn ạ",
+    "expected": {
+      "travelDate": "23/11/2026",
+      "route": "NB - HN",
+      "pax": "1",
+      "customerString": "Hoàng Xuân Vinh 0385 661 539",
+      "pickupTime": "19:45 - 20:15",
+      "pickupPoint": "Hang Múa Eco Garden",
+      "dropPoint": "công viên cầu giấy"
+    }
+  },
+  {
+    "id": 2,
+    "raw": "15:10 đặt xe đón 5 pax từ bến thuyền tràng an\n4pax về bích động\n1pax trả  Si Grand Hotel",
+    "form": "@Hl Việt Nam Easy Go Thế Long Travel xác nhận booking\nĐại lý                 : vpl \nCode                 : tl231126\nNgày đi             : 23/11/2026\nLịch trình          : taxi tràng an - nb \nLoại xe               :  7c\nSố lượng khách      : 5 \nTên khách          : \nGiờ đón              : 15h10 \nĐiểm đón           : bến thuyền tràng an \nĐiểm trả             : \nGiá                       : 200k\ntracy xác nhận booking\nAnh chị vui lòng check lại thông tin giúp em, em cảm ơn ạ",
+    "expected": {
+      "travelDate": "23/11/2026",
+      "route": "taxi tràng an - nb",
+      "pax": "5",
+      "customerString": "",
+      "pickupTime": "15h10",
+      "pickupPoint": "bến thuyền tràng an",
+      "dropPoint": ""
+    }
+  },
+  {
+    "id": 3,
+    "raw": "Ngày 23/11\n1k Tam Coc - Cat Ba\nChuyến : 13h30\nĐón: The Luna hostel $ bar\nTrả: báo sau\nTên: Manee margain +60125408630",
+    "form": "Thế Long Travel xác nhận booking\nĐại lý             : Nb FootPrint\nCode             : TL231126\nNgày đi         : 23/11/2026\nLịch trình      : NB - CB\nLoại xe           : Bus\nSố lượng khách   : 1\nTên khách        : Manee margain +60125408630\nGiờ đón            : 12:45 - 13:00 \nĐiểm đón         : The Luna hostel $ bar\nĐiểm trả           : báo sau\nGiá vé               :\nNote                 : a/c vui lòng thanh toán bk khi kế toán gửi công nợ\ntheo ngày\nLưu ý : Các điểm bao gồm đón bên em hẹn đón theo thời gian quy định đã hẹn nếu khách không chuẩn bị kịp thì đại lí báo khách tự đến văn phòng hộ bên e\nFelix xác nhận bk\nAnh chị vui lòng check lại thông tin giúp em, em cảm ơn ạ",
+    "expected": {
+      "travelDate": "23/11/2026",
+      "route": "NB - CB",
+      "pax": "1",
+      "customerString": "Manee margain +60125408630",
+      "pickupTime": "12:45 - 13:00",
+      "pickupPoint": "The Luna hostel $ bar",
+      "dropPoint": "báo sau"
+    }
+  },
+  {
+    "id": 4,
+    "raw": "chị đặt xe :  chuyến 14h chiều nay /  ngày 23 tháng 10/  1 khách /  đón công viên cầu giấy /  trả trường cấp 3 Nguyễn Công Trứ - Ninh Bình /  Hoàng Xuân Vinh /  0385 661 539",
+    "form": "Thế Long Travel xác nhận booking\nĐại lý             : Hang Múa Eco Garden\nCode             : TL231026\nNgày đi         : 23/10/2026\nLịch trình      : HN - NB\nLoại xe           : limo\nSố lượng khách   : 1\nTên khách        : Hoàng Xuân Vinh 0385661539\nGiờ đón            : 13:10\nĐiểm đón         : Công viên Cầu Giấy\nĐiểm trả           : Trường cấp 3 Nguyễn Công Trứ - Ninh Bình\nGiá vé               :\nNote                 : a/c vui lòng thanh toán bk khi kế toán gửi công nợ\ntheo ngày\nLưu ý : Các điểm bao gồm đón bên em hẹn đón theo thời gian quy định đã hẹn nếu khách không chuẩn bị kịp thì đại lí báo khách tự đến văn phòng hộ bên e\nFelix xác nhận bk\nAnh chị vui lòng check lại thông tin giúp em, em cảm ơn ạ",
+    "expected": {
+      "travelDate": "23/10/2026",
+      "route": "HN - NB",
+      "pax": "1",
+      "customerString": "Hoàng Xuân Vinh 0385661539",
+      "pickupTime": "13:10",
+      "pickupPoint": "Công viên Cầu Giấy",
+      "dropPoint": "Trường cấp 3 Nguyễn Công Trứ - Ninh Bình"
+    }
+  },
+  {
+    "id": 5,
+    "raw": "23/11, 15h30, 1k\nLars Blekkenhorst\nEmail larsblekkenhorst1310@gmail.com\nPhone +31651057085\nCB-NB bus thg ạ",
+    "form": "@Dixie Thế Long Travel xác nhận booking\nĐại lý : GMN\nCode : tl231126\nNgày đi : 23/11/2026\nLịch trình : CB - NB\nLoại xe : Bus\nSố lượng khách : 1\nTên khách : Lars Blekkenhorst +31651057085\nGiờ đón : 15:00 - 15:30\nĐiểm đón : 228 1/4\nĐiểm trả : the long\nGiá :\nNote : \nLưu ý : Các điểm bao gồm đón bên em hẹn đón theo thời gian quy định đã hẹn nếu khách không chuẩn bị kịp thì đại lí báo khách tự đến văn phòng hộ bên e\nFELIX xác nhận booking\nAnh chị vui lòng check lại thông tin giúp em, em cảm ơn ạ",
+    "expected": {
+      "travelDate": "23/11/2026",
+      "route": "CB - NB",
+      "pax": "1",
+      "customerString": "Lars Blekkenhorst +31651057085",
+      "pickupTime": "15:00 - 15:30",
+      "pickupPoint": "228 1/4",
+      "dropPoint": "the long"
+    }
+  },
+  {
+    "id": 6,
+    "raw": "Ngày                    : 23/11/2026\nLoại xe                 : Limousine\nSL khách             : 2\nTên khách           : Rondinoni Maria Paula\nGiờ đón               : 5:00 PM\nĐón                      : Indochine\nTrả                        : PARAGON 2 BOUTIQUE HOTEL AND POOL",
+    "form": "Thế Long Travel xác nhận booking\nĐại lý : Indochine\nCode : tl231126\nNgày đi : 23/11/2026\nLịch trình : NB - HN\nLoại xe : Limousine\nSố lượng khách : 2\nTên khách : Rondinoni Maria Paula\nGiờ đón : 17:00 - 17:30\nĐiểm đón : Indochine\nĐiểm trả : PARAGON 2 BOUTIQUE HOTEL AND POOL\nGiá : 360 / pax \nNote : Thanh toán khi kế toán gửi công nợ ngày theo dõi / Giờ đón 5:00 PM\nLưu ý : Các điểm bao gồm đón bên em hẹn đón theo thời gian quy định đã hẹn nếu khách không chuẩn bị kịp thì đại lí báo khách tự đến văn phòng hộ bên e\nlong xác nhận booking\nAnh chị vui lòng check lại thông tin giúp em, em cảm ơn ạ",
+    "expected": {
+      "travelDate": "23/11/2026",
+      "route": "NB - HN",
+      "pax": "2",
+      "customerString": "Rondinoni Maria Paula",
+      "pickupTime": "17:00 - 17:30",
+      "pickupPoint": "Indochine",
+      "dropPoint": "PARAGON 2 BOUTIQUE HOTEL AND POOL"
+    }
+  },
+  {
+    "id": 7,
+    "raw": "@All  Trưa nay 23/11, em gửi thêm 2 bus CB - NB. Đón bến Bèo\nHD Nghĩa - 0342159201 giao khách\n2k - Renana Straussman +972 58-449-9000 => Team hỏi khách điểm trả giúp e nhé ạ",
+    "form": "Thế Long Travel xác nhận booking\nĐại lý : sunlight\nCode : tl231126\nNgày đi : 23/11/2026\nLịch trình : CB - NB\nLoại xe : Bus\nSố lượng khách : 2\nTên khách : Renana Straussman +972 58-449-9000\nGiờ đón : 12:00 - 12:30\nĐiểm đón : bến Bèo (HD Nghĩa - 0342159201 giao khách)\nĐiểm trả :\nGiá :\nNote : Thanh toán khi kế toán gửi công nợ ngày theo dõi / Team hỏi khách điểm trả giúp e nhé ạ\nLưu ý : Các điểm bao gồm đón bên em hẹn đón theo thời gian quy định đã hẹn nếu khách không chuẩn bị kịp thì đại lí báo khách tự đến văn phòng hộ bên e\nlong xác nhận booking\nAnh chị vui lòng check lại thông tin giúp em, em cảm ơn ạ",
+    "expected": {
+      "travelDate": "23/11/2026",
+      "route": "CB - NB",
+      "pax": "2",
+      "customerString": "Renana Straussman +972 58-449-9000",
+      "pickupTime": "12:00 - 12:30",
+      "pickupPoint": "bến Bèo (HD Nghĩa - 0342159201 giao khách)",
+      "dropPoint": ""
+    }
+  },
+  {
+    "id": 8,
+    "raw": "23/11, 12h30, 2k\nChristopher Christmas\nEmail xxmass@live.com\nPhone +19058186712\nCB-NB bus thg ạ",
+    "form": "Thế Long Travel xác nhận booking\nĐại lý : GMN\nCode : tl231126\nNgày đi : 23/11/2026\nLịch trình : CB - NB\nLoại xe : Bus thường\nSố lượng khách : 2\nTên khách : Christopher Christmas +19058186712\nGiờ đón : 12:00 - 12:30\nĐiểm đón : Cát Bà\nĐiểm trả : Ninh Bình\nGiá :\nNote : Thanh toán khi kế toán gửi công nợ ngày theo dõi\nLưu ý : Các điểm bao gồm đón bên em hẹn đón theo thời gian quy định đã hẹn nếu khách không chuẩn bị kịp thì đại lí báo khách tự đến văn phòng hộ bên e\nlong  xác nhận booking\nAnh chị vui lòng check lại thông tin giúp em, em cảm ơn ạ",
+    "expected": {
+      "travelDate": "23/11/2026",
+      "route": "CB - NB",
+      "pax": "2",
+      "customerString": "Christopher Christmas +19058186712",
+      "pickupTime": "12:00 - 12:30",
+      "pickupPoint": "Cát Bà",
+      "dropPoint": "Ninh Bình"
+    }
+  },
+  {
+    "id": 9,
+    "raw": "AAVQ7948\nThứ 4 25 thg 11 2026 · Express 16\nRoute: Hoa Binh to Tam Coc  13:30\nđón :Mac Thanh Homestay\ntrả   Tam Coc Sunshine Hostel\nCác hành khách  3 × Adult\nTali Paz\nAdi Vaknin\nShani Bar\nSố điện thoại: +972528668762",
+    "form": "Thế Long Travel xác nhận booking \nĐại lý             : VPL\nCode             : TL251126\nNgày đi         : 25/11/26\nLịch trình      : MC - NB \nLoại xe           : MINIVAN\nSố lượng khách   : 3\nTên khách        : Tali Paz +972528668762\nGiờ đón            : 13:00 - 13:20\nĐiểm đón         : Mac Thanh Homestay\nĐiểm trả           : Tam Coc Sunshine Hostel\nGiá vé               : \nNote                 :\nFelix xác nhận bk\nAnh chị vui lòng check lại thông tin giúp em, em cảm ơn ạ",
+    "expected": {
+      "travelDate": "25/11/26",
+      "route": "MC - NB",
+      "pax": "3",
+      "customerString": "Tali Paz +972528668762",
+      "pickupTime": "13:00 - 13:20",
+      "pickupPoint": "Mac Thanh Homestay",
+      "dropPoint": "Tam Coc Sunshine Hostel"
+    }
+  },
+  {
+    "id": 10,
+    "raw": "Xác nhận đặt chỗ\nMã đặt chỗ: R4985\nNgày khởi hành: 25 tháng 11 năm 2026\nLịch trình: bus Ninh Bình - Cát Bà (đã bao gồm vé phà)\nLoại phương tiện: bus \nSố lượng hành khách: 1\nTên hành khách: Pasquale Scarano +39 340 735 3382\nThời gian đón: 6:40 - 7:00\nĐiểm đón: Tam Coc Sunseekers Homestay 2\nĐiểm trả: Cat Ba Love House\nnote : thu khách 250k",
+    "form": "@Vneasygotravel Thế Long Travel xác nhận booking\nĐại lý                 : VPL  R4985\nCode                 : tl251126\nNgày đi             : 25/11/2026\nLịch trình          : NB - CB\nLoại xe               : bus\nSố lượng khách      : 1\nTên khách          : Pasquale Scarano +39 340 735 3382\nGiờ đón              : 6:40 - 7:00\nĐiểm đón           : Tam Coc Sunseekers Homestay 2\nĐiểm trả             : Cat Ba Love House\nGiá                       : \nNote                    : thu khách 250k \nLưu ý                   : Các điểm bao gồm đón bên em hẹn đón theo thời gian quy định đã hẹn nếu khách không chuẩn bị kịp thì đại lí báo khách tự đến văn phòng hộ bên e\nSAEN xác nhận booking\nAnh chị vui lòng check lại thông tin giúp em, em cảm ơn ạ",
+    "expected": {
+      "travelDate": "25/11/2026",
+      "route": "NB - CB",
+      "pax": "1",
+      "customerString": "Pasquale Scarano +39 340 735 3382",
+      "pickupTime": "6:40 - 7:00",
+      "pickupPoint": "Tam Coc Sunseekers Homestay 2",
+      "dropPoint": "Cat Ba Love House"
+    }
+  },
+  {
+    "id": 11,
+    "raw": "Alo em 1k ninh bình 9h00 25/11 đón tại ks Phương Phương +43 664 4112015",
+    "form": "Thế Long Travel xác nhận booking \nĐại lý             : em phương cát bà\nCode             : tl251126\nNgày đi         : 25/11/2026\nLịch trình      : cb-nb \nLoại xe           :  bus \nSố lượng khách   : 1\nTên khách        : johann +43 664 4112015\nGiờ đón            : 7h45 8h \nĐiểm đón         : ks Phương Phương\nĐiểm trả           : the long\nNote                 : gửi unc trước khi khách đi để booking có hiệu lực - stk nhận tiền 5285678386 techcombank PHAM HOANG PHUC\nTRACY xác nhận bk\nAnh chị vui lòng check lại thông tin giúp em, em cảm ơn ạ",
+    "expected": {
+      "travelDate": "25/11/2026",
+      "route": "cb-nb",
+      "pax": "1",
+      "customerString": "johann +43 664 4112015",
+      "pickupTime": "7h45 8h",
+      "pickupPoint": "ks Phương Phương",
+      "dropPoint": "the long"
+    }
+  },
+  {
+    "id": 12,
+    "raw": "#AAVQ5679 \nThứ 6 26 thg 2 2027 · Express 16\n\nRoute: Ninh Binh to Pu Luong\n13:00\n3h 10m\n16:10\nThe Long Travel\nOH Pu Luong Homestay\nCác hành khách\n2 × Adult\nCác hành khách\nTênFareQuốc tịchTicket / seat\nEric Maxime Joyal\nSố điện thoại: +18195002830 · E-mail: eric_joyal@hotmail.com\nAdult\n——\nCathy Seguin\nSố điện thoại: +18195002830 · E-mail: eric_joyal@hotmail.com\nAdult",
+    "form": "@Vneasygotravel Thế Long Travel xác nhận booking\nĐại lý             : AAVQ5679\nCode               : TL260227\nNgày đi            : 26/02/2027\nLịch trình         : NB - PL\nLoại xe            : minivan\nSố lượng khách     : 2\nTên khách          : Eric Maxime Joyal +18195002830\nGiờ đón            : 12:45 - 13:00\nĐiểm đón           : The Long Travel\nĐiểm trả           : OH Pu Luong Homestay\nGiá vé             :\nNote               : Thanh toán khi kế toán gửi công nợ ngày theo dõi\nLưu ý              : Các điểm bao gồm đón bên em hẹn đón theo thời gian quy định đã hẹn nếu khách không chuẩn bị kịp thì đại lí báo khách tự đến văn phòng hộ bên e\nSAEN xác nhận booking\nAnh chị vui lòng check lại thông tin giúp em, em cảm ơn ạ",
+    "expected": {
+      "travelDate": "26/02/2027",
+      "route": "NB - PL",
+      "pax": "2",
+      "customerString": "Eric Maxime Joyal +18195002830",
+      "pickupTime": "12:45 - 13:00",
+      "pickupPoint": "The Long Travel",
+      "dropPoint": "OH Pu Luong Homestay"
+    }
+  },
+  {
+    "id": 13,
+    "raw": "#AAVB5627\nRoute:\nTam Coc boat station to mai châu\nVehicle: Express 16\nDeparture station: tam coc boat station\nDeparture at: 25-11-2026 08:00\nArrival station: Little Mai Chau Homestay\nAdult: 2pax\nPeter Bennetts\nPhone:\n+84366114397",
+    "form": "Thế Long Travel xác nhận booking \nĐại lý             : VPL \nCode             : TL251126\nNgày đi         : 25/11/26\nLịch trình      : NB - MC\nLoại xe           : MINIVAN\nSố lượng khách   : 2\nTên khách        : Peter Bennetts +84366114397\nGiờ đón            : 7:45 - 8:00\nĐiểm đón         :  tam coc boat station\nĐiểm trả           : Little Mai Chau Homestay\nGiá vé               : \nNote                 :\nFelix xác nhận bk\nAnh chị vui lòng check lại thông tin giúp em, em cảm ơn ạ",
+    "expected": {
+      "travelDate": "25/11/26",
+      "route": "NB - MC",
+      "pax": "2",
+      "customerString": "Peter Bennetts +84366114397",
+      "pickupTime": "7:45 - 8:00",
+      "pickupPoint": "tam coc boat station",
+      "dropPoint": "Little Mai Chau Homestay"
+    }
+  },
+  {
+    "id": 14,
+    "raw": "EM  GỬI  2    PAX   CB - NB    CHUYẾN  12:30PM   NGÀY   25/10\nTÊN : Marc\nCODE:  810\nĐÓN:  CATBA BUFFALO HOSTEL",
+    "form": "thế long travel xác nhận booking \nĐại lý                     : BUFFALO 810\nCode                     : TL251026\nNgày đi                 : 25/10/26\nLịch trình              : CB - NB \nLoại xe                  : BUS\nSố lượng khách  : 2\nTên khách            : Marc\nGiờ đón                : 12:00 - 12:30\nĐiểm đón             : CATBA BUFFALO HOSTEL\nĐiểm Trả               : BÁO SAU \nnote                       :\nphúc  xác nhận BK\nAnh chị vui lòng check lại thông tin giúp em, em cảm ơn ạ",
+    "expected": {
+      "travelDate": "25/10/26",
+      "route": "CB - NB",
+      "pax": "2",
+      "customerString": "Marc",
+      "pickupTime": "12:00 - 12:30",
+      "pickupPoint": "CATBA BUFFALO HOSTEL",
+      "dropPoint": "BÁO SAU"
+    }
+  },
+  {
+    "id": 15,
+    "raw": "EM GỬI 2  KHÁCH  CATBA - NINH BINH- PHONG NHA  CHUYẾN 12PM   NGÀY  25/10 ( CABIN 20)\nTÊN:  GRACE + ARCHIE\nĐÓN:   FAMILY HOME CATBA\nĐÓN: NINH BÌNH 20:00\nCODE: 970\nWS +447523354006",
+    "form": "@Family Home Catba  thế long travel xác nhận booking \nĐại lý                     : FAMILY HOME BUS 970\nCode                     : TL251026\nNgày đi                 : 25/10/26\nLịch trình              : CB - NB\nLoại xe                  :  bus + VIP 20\nSố lượng khách  : 2\nTên khách            : GRACE + ARCHIE +447523354006\nGiờ đón                : 12:00 - 12:20\nĐiểm đón             : FAMILY HOME CATBA\nĐiểm Trả               : 60 Trần Nhân Tông ( nối Phong Nha chuyến 20:00 )\nTú xác nhận BK\nAnh chị vui lòng check lại thông tin giúp em, em cảm ơn ạ",
+    "expected": {
+      "travelDate": "25/10/26",
+      "route": "CB - NB",
+      "pax": "2",
+      "customerString": "GRACE + ARCHIE +447523354006",
+      "pickupTime": "12:00 - 12:20",
+      "pickupPoint": "FAMILY HOME CATBA",
+      "dropPoint": "60 Trần Nhân Tông ( nối Phong Nha chuyến 20:00 )"
+    }
+  },
+  {
+    "id": 16,
+    "raw": "EM GỬI  5  KHÁCH  CATBA - NINH BINH  CHUYẾN  12PM   NGÀY  25/10\nTÊN:  SADIE + JOSEPH + OLIVER + IRIS + ROWAN\nĐÓN:   FAMILY HOME CATBA\nCODE: 971\nWS: +18673322306",
+    "form": "@Family Home Catba thế long travel xác nhận booking \nĐại lý                     : FAMILY HOME BUS 971\nCode                     : TL251026\nNgày đi                 : 25/10/26\nLịch trình              : CB - NB\nLoại xe                  :  bus\nSố lượng khách  : 5\nTên khách            : SADIE + JOSEPH + OLIVER + IRIS + ROWAN +18673322306\nGiờ đón                : 12:00 - 12:20\nĐiểm đón             : FAMILY HOME CATBA\nĐiểm Trả               : Tam Coc\nTú xác nhận BK\nAnh chị vui lòng check lại thông tin giúp em, em cảm ơn ạ",
+    "expected": {
+      "travelDate": "25/10/26",
+      "route": "CB - NB",
+      "pax": "5",
+      "customerString": "SADIE + JOSEPH + OLIVER + IRIS + ROWAN +18673322306",
+      "pickupTime": "12:00 - 12:20",
+      "pickupPoint": "FAMILY HOME CATBA",
+      "dropPoint": "Tam Coc"
+    }
+  },
+  {
+    "id": 17,
+    "raw": "Chiều 25/10 đón 1 pax Ninh Binh- Puluong\n- tên celine. \nNote thu 350k\ntrả Qui E Ora",
+    "form": "thế long travel xác nhận booking \nĐại lý                     : PL LAN ANH\nCode                     : TL251026\nNgày đi                 : 25/10/26\nLịch trình              : NB - PL\nLoại xe                  : BUS\nSố lượng khách  : 1\nTên khách            : celine\nGiờ đón                : 13:00 - 13:30\nĐiểm đón             : The Long Hotel \nĐiểm Trả               : Qui E Ora\nGiá vé                    : \nnote                       : Note thu 350k\nPHÚC  xác nhận BK\nAnh chị vui lòng check lại thông tin giúp em, em cảm ơn ạ",
+    "expected": {
+      "travelDate": "25/10/26",
+      "route": "NB - PL",
+      "pax": "1",
+      "customerString": "celine",
+      "pickupTime": "13:00 - 13:30",
+      "pickupPoint": "The Long Hotel",
+      "dropPoint": "Qui E Ora"
+    }
+  },
+  {
+    "id": 18,
+    "raw": "ngày 25/11, bên e book 2 vé đi tour cúc phương , tên khách Murillo Gonzalez Marta ạ",
+    "form": "Thế Long Travel xác nhận booking \nĐại lý             : Hoang minh \nCode             : TL251126\nNgày đi         : 25/11/26\nLịch trình      : CÚC PHƯƠNG\nLoại xe           : minivan\nSố lượng khách   : 2\nTên khách        : Murillo Gonzalez Marta \nGiờ đón            : 8:45 - 9:10\nĐiểm đón         : Hoang minh \nĐiểm trả           : Hoang minh \nGiá vé               : \nNote                 : a/c vui lòng thanh toán bk khi kế toán gửi công nợ theo ngày\nLưu ý                : Các điểm bao gồm đón bên em hẹn đón theo thời gian quy định đã hẹn nếu khách không chuẩn bị kịp thì đại lí báo khách tự đến văn phòng hộ bên em\nFelix xác nhận bk\nAnh chị vui lòng check lại thông tin giúp em, em cảm ơn ạ",
+    "expected": {
+      "travelDate": "25/11/26",
+      "route": "CÚC PHƯƠNG",
+      "pax": "2",
+      "customerString": "Murillo Gonzalez Marta",
+      "pickupTime": "8:45 - 9:10",
+      "pickupPoint": "Hoang minh",
+      "dropPoint": "Hoang minh"
+    }
+  },
+  {
+    "id": 19,
+    "raw": "Ninh Bình - Mai Châu\n13:30\n25/11/2026\n2 ghế:\n1, 2\nMã vé:\n05XOY2\nMã đặt chỗ:\nO3K69HS\nĐón:\n13:10\nTC Đón:\nTam Cốc Sunshine Hostel\nTrả:\n17:30 - La Mai Chau Home - M34C+6PP, Nà Chiềng, Mai Châu, Phú Thọ 36400, Viêt @Kế Toán Việt Nam Easy Go Travel \nAnaïs Ventura\nSĐT:\n33766385151\nEmail:\nanaisv.sylvainl@gmail.com\nGhi chú:\n+33766385151, có dùng",
+    "form": "Thế Long Travel xác nhận booking \nĐại lý             : VXR 05XOY2\nCode             : TL251126\nNgày đi         : 25/11/26\nLịch trình      : Ninh Bình - Mai Châu\nLoại xe           : MINIVAN\nSố lượng khách   : 2\nTên khách        : Anaïs Ventura 33766385151\nGiờ đón            : 12:45 - 13:00\nĐiểm đón         : Tam Cốc Sunshine Hostel\nĐiểm trả           : La Mai Chau Home \nGiá vé               : \nNote                 : \nLưu ý                : Các điểm bao gồm đón bên em hẹn đón theo thời gian quy định đã hẹn nếu khách không chuẩn bị kịp thì đại lí báo khách tự đến văn phòng hộ bên em\nFelix xác nhận bk\nAnh chị vui lòng check lại thông tin giúp em, em cảm ơn ạ",
+    "expected": {
+      "travelDate": "25/11/26",
+      "route": "Ninh Bình - Mai Châu",
+      "pax": "2",
+      "customerString": "Anaïs Ventura 33766385151",
+      "pickupTime": "12:45 - 13:00",
+      "pickupPoint": "Tam Cốc Sunshine Hostel",
+      "dropPoint": "La Mai Chau Home"
+    }
+  },
+  {
+    "id": 20,
+    "raw": "EM  GỬI 4  PAX   CB - NB    CHUYẾN  12:30PM   NGÀY   24/11\nTÊN :  SADIE X 4 PAX\nCODE:     4458\nĐÓN:  CATBA BUFF\\ALO HOSTEL",
+    "form": "@Thanh Phương Thế Long Travel xác nhận booking\nĐại lý                 : BUFFALO 4458\nCode                 : tl241126\nNgày đi             : 24/11/2026\nLịch trình          : CB - NB\nLoại xe               :  \nSố lượng khách      : 4\nTên khách          : SADIE\nGiờ đón              : 12:00 - 12:30\nĐiểm đón           : CATBA BUFFALO HOSTEL\nĐiểm trả             : NINH BINH\nGiá                       : \nNote                    : Thanh toán khi kế toán gửi công nợ ngày theo dõi\nLưu ý                   : Các điểm bao gồm đón bên em hẹn đón theo thời gian quy định đã hẹn nếu khách không chuẩn bị kịp thì đại lí báo khách tự đến văn phòng hộ bên e\nSAEN xác nhận booking\nAnh chị vui lòng check lại thông tin giúp em, em cảm ơn ạ",
+    "expected": {
+      "travelDate": "24/11/2026",
+      "route": "CB - NB",
+      "pax": "4",
+      "customerString": "SADIE",
+      "pickupTime": "12:00 - 12:30",
+      "pickupPoint": "CATBA BUFFALO HOSTEL",
+      "dropPoint": "NINH BINH"
+    }
+  },
+  {
+    "id": 21,
+    "raw": "EM  GỬI 3  PAX   CB - NB    CHUYẾN  12:30PM   NGÀY   24/11\nTÊN :  Styim, Maurice, Sophie \nCODE:      3437\nĐÓN:  CATBA BUFF\\ALO HOSTEL",
+    "form": "Thế Long Travel xác nhận booking\nĐại lý             : BUFFALO 3437\nCode             : TL241126\nNgày đi         : 24/11/2026\nLịch trình      : CB - NB\nLoại xe           : Bus\nSố lượng khách   : 3\nTên khách        : Styim, Maurice, Sophie\nGiờ đón            : 12:20 - 12:40\nĐiểm đón         : Catba Buffalo Hostel\nĐiểm trả           : the long\nGiá vé               :\nNote                 : \nLưu ý : Các điểm bao gồm đón bên em hẹn đón theo thời gian quy định đã hẹn nếu khách không chuẩn bị kịp thì đại lí báo khách tự đến văn phòng hộ bên e\nFelix xác nhận bk\nAnh chị vui lòng check lại thông tin giúp em, em cảm ơn ạ",
+    "expected": {
+      "travelDate": "24/11/2026",
+      "route": "CB - NB",
+      "pax": "3",
+      "customerString": "Styim, Maurice, Sophie",
+      "pickupTime": "12:20 - 12:40",
+      "pickupPoint": "Catba Buffalo Hostel",
+      "dropPoint": "the long"
+    }
+  },
+  {
+    "id": 22,
+    "raw": "@Thế Long Travel Cho chị đặt 1 khách chuyến 12h ngày mai ( 20/11 ) đón khách tại Lô 27B, Cảng tàu Tuần Châu, Phường Tuần Châu, Quảng Ninh.\ntên khách Tjelfe-Madita Hinz\nSDT +49 176 24123406\nTrả k tại Ninh binh - mình báo điểm trả sau nhé \nThanks team",
+    "form": "Thế Long Travel xác nhận booking\nĐại lý                  : 85 mã mây\nCode                  : TL201126\nNgày đi              : 20/11/2026\nLịch trình           : HL - NB\nLoại xe               : Bus\nSố lượng khách : 1\nTên khách           : Tjelfe-Madita Hinz +49 176 24123406\nGiờ đón              : 11:45 - 12:15\nĐiểm đón           : Lô 27B, Cảng tàu Tuần Châu\nĐiểm trả            : Ninh Bình (báo sau)\nGiá vé                :\nNote                  : a/c vui lòng thanh toán bk khi kế toán gửi công nợ theo ngày\nLưu ý                 : Các điểm bao gồm đón bên em hẹn đón theo thời gian quy định đã hẹn nếu khách không chuẩn bị kịp thì đại lí báo khách tự đến văn phòng hộ bên em\nFELIX xác nhận Booking\nAnh chị vui lòng check lại thông tin giúp em, em cảm ơn ạ",
+    "expected": {
+      "travelDate": "20/11/2026",
+      "route": "HL - NB",
+      "pax": "1",
+      "customerString": "Tjelfe-Madita Hinz +49 176 24123406",
+      "pickupTime": "11:45 - 12:15",
+      "pickupPoint": "Lô 27B, Cảng tàu Tuần Châu",
+      "dropPoint": "Ninh Bình (báo sau)"
+    }
+  },
+  {
+    "id": 23,
+    "raw": "24/11 em book 2v đi pu luong \nJackomino Sam\nĐón 13:00 pm \nThu hộ 800k",
+    "form": "Thế Long Travel xác nhận booking\nĐại lý                 : Lotus Field\nCode                 : tl241126\nNgày đi              : 24/11/2026\nLịch trình           : Ninh Bình - Pù Luông\nLoại xe              : Bus\nSố lượng khách       : 2\nTên khách            : Jackomino Sam\nGiờ đón              : 13:00 - 13:30\nĐiểm đón             : Lotus Field\nĐiểm trả             : Pù Luông\nGiá                  : Thu hộ 800k\nNote                 : Thanh toán khi kế toán gửi công nợ ngày theo dõi\nLưu ý                : Các điểm bao gồm đón bên em hẹn đón theo thời gian quy định đã hẹn nếu khách không chuẩn bị kịp thì đại lí báo khách tự đến văn phòng hộ bên e\nlong  xác nhận booking\nAnh chị vui lòng check lại thông tin giúp em, em cảm ơn ạ",
+    "expected": {
+      "travelDate": "24/11/2026",
+      "route": "Ninh Bình - Pù Luông",
+      "pax": "2",
+      "customerString": "Jackomino Sam",
+      "pickupTime": "13:00 - 13:30",
+      "pickupPoint": "Lotus Field",
+      "dropPoint": "Pù Luông"
+    }
+  },
+  {
+    "id": 24,
+    "raw": "EM  GỬI  1   PAX   CB - NB    CHUYẾN  12:30PM   NGÀY   24/11\nTÊN :  CONNOR\nCODE:       3127\nĐÓN:  CATBA BUFFALO HOSTEL",
+    "form": "Thế Long Travel xác nhận booking\nĐại lý                 : BUFFALO 3127\nCode                 : tl241126\nNgày đi             : 24/11/2026\nLịch trình          : CB - NB\nLoại xe               :  bus \nSố lượng khách      : 1\nTên khách          : CONNOR\nGiờ đón              : 12:00 - 12:30\nĐiểm đón           : CATBA BUFFALO HOSTEL\nĐiểm trả             : NINH BINH\nGiá                       : \nNote                    : Thanh toán khi kế toán gửi công nợ ngày theo dõi\nLưu ý                   : Các điểm bao gồm đón bên em hẹn đón theo thời gian quy định đã hẹn nếu khách không chuẩn bị kịp thì đại lí báo khách tự đến văn phòng hộ bên e\nSAEN xác nhận booking\nAnh chị vui lòng check lại thông tin giúp em, em cảm ơn ạ",
+    "expected": {
+      "travelDate": "24/11/2026",
+      "route": "CB - NB",
+      "pax": "1",
+      "customerString": "CONNOR",
+      "pickupTime": "12:00 - 12:30",
+      "pickupPoint": "CATBA BUFFALO HOSTEL",
+      "dropPoint": "NINH BINH"
+    }
+  },
+  {
+    "id": 25,
+    "raw": "EM  GỬI 4  PAX   CB - NB    CHUYẾN  12:30PM   NGÀY   24/11\nTÊN :  SADIE X 4 PAX\nCODE:     4458\nĐÓN:  CATBA BUFF\\ALO HOSTEL",
+    "form": "Thế Long Travel xác nhận booking\nĐại lý                 : BUFFALO 4458\nCode                 : tl241126\nNgày đi             : 24/11/2026\nLịch trình          : CB - NB\nLoại xe               :  \nSố lượng khách      : 4\nTên khách          : SADIE\nGiờ đón              : 12:00 - 12:30\nĐiểm đón           : CATBA BUFFALO HOSTEL\nĐiểm trả             : NINH BINH\nGiá                       : \nNote                    : Thanh toán khi kế toán gửi công nợ ngày theo dõi\nLưu ý                   : Các điểm bao gồm đón bên em hẹn đón theo thời gian quy định đã hẹn nếu khách không chuẩn bị kịp thì đại lí báo khách tự đến văn phòng hộ bên e\nSAEN xác nhận booking\nAnh chị vui lòng check lại thông tin giúp em, em cảm ơn ạ",
+    "expected": {
+      "travelDate": "24/11/2026",
+      "route": "CB - NB",
+      "pax": "4",
+      "customerString": "SADIE",
+      "pickupTime": "12:00 - 12:30",
+      "pickupPoint": "CATBA BUFFALO HOSTEL",
+      "dropPoint": "NINH BINH"
+    }
+  },
+  {
+    "id": 26,
+    "raw": "EM  GỬI 3  PAX   CB - NB    CHUYẾN  12:30PM   NGÀY   24/11\nTÊN :  Styim, Maurice, Sophie \nCODE:      3437\nĐÓN:  CATBA BUFF\\ALO HOSTEL",
+    "form": "Thế Long Travel xác nhận booking\nĐại lý             : BUFFALO 3437\nCode             : TL241126\nNgày đi         : 24/11/2026\nLịch trình      : CB - NB\nLoại xe           : Bus\nSố lượng khách   : 3\nTên khách        : Styim, Maurice, Sophie\nGiờ đón            : 12:20 - 12:40\nĐiểm đón         : Catba Buffalo Hostel\nĐiểm trả           : the long\nGiá vé               :\nNote                 : \nLưu ý : Các điểm bao gồm đón bên em hẹn đón theo thời gian quy định đã hẹn nếu khách không chuẩn bị kịp thì đại lí báo khách tự đến văn phòng hộ bên e\nFelix xác nhận bk\nAnh chị vui lòng check lại thông tin giúp em, em cảm ơn ạ",
+    "expected": {
+      "travelDate": "24/11/2026",
+      "route": "CB - NB",
+      "pax": "3",
+      "customerString": "Styim, Maurice, Sophie",
+      "pickupTime": "12:20 - 12:40",
+      "pickupPoint": "Catba Buffalo Hostel",
+      "dropPoint": "the long"
+    }
+  },
+  {
+    "id": 27,
+    "raw": "EM  GỬI 1  PAX   CB - NB    CHUYẾN  12:30PM   NGÀY   24/11\nTÊN :  ELLA\nCODE:      4262\nĐÓN:  CATBA BUFF\\ALO HOSTEL",
+    "form": "Thế Long Travel xác nhận booking\nĐại lý                 :BUFFALO 4262\nCode                   : tl241126\nNgày đi                : 24/11/2026\nLịch trình             : CB - NB\nLoại xe                : Bus\nSố lượng khách         : 1\nTên khách              : ELLA\nGiờ đón                : 12:00 - 12:30\nĐiểm đón               : CATBA BUFFALO HOSTEL\nĐiểm trả               :\nGiá                    :\nNote                   : Thanh toán khi kế toán gửi công nợ ngày theo dõi\nLưu ý                  : Các điểm bao gồm đón bên em hẹn đón theo thời gian quy định đã hẹn nếu khách không chuẩn bị kịp thì đại lí báo khách tự đến văn phòng hộ bên e\nSAEN xác nhận booking\nAnh chị vui lòng check lại thông tin giúp em, em cảm ơn ạ",
+    "expected": {
+      "travelDate": "24/11/2026",
+      "route": "CB - NB",
+      "pax": "1",
+      "customerString": "ELLA",
+      "pickupTime": "12:00 - 12:30",
+      "pickupPoint": "CATBA BUFFALO HOSTEL",
+      "dropPoint": ""
+    }
+  },
+  {
+    "id": 28,
+    "raw": "EM  GỬI 1  PAX   CB - NB    CHUYẾN  12:30PM   NGÀY   24/11\nTÊN :   gaia\nCODE:      4259\nĐÓN:  CATBA BUFF\\ALO HOSTEL",
+    "form": "Thế Long Travel xác nhận booking\nĐại lý                 : BUFFALO 4259\nCode                   : tl241126\nNgày đi                : 24/11/2026\nLịch trình             : CB - NB\nLoại xe                : Bus\nSố lượng khách         : 1\nTên khách              : gaia\nGiờ đón                : 12:00 - 12:30\nĐiểm đón               : CATBA BUFFALO HOSTEL\nĐiểm trả               :\nGiá                    :\nNote                   : Thanh toán khi kế toán gửi công nợ ngày theo dõi\nLưu ý                  : Các điểm bao gồm đón bên em hẹn đón theo thời gian quy định đã hẹn nếu khách không chuẩn bị kịp thì đại lí báo khách tự đến văn phòng hộ bên e\nSAEN xác nhận booking\nAnh chị vui lòng check lại thông tin giúp em, em cảm ơn ạ",
+    "expected": {
+      "travelDate": "24/11/2026",
+      "route": "CB - NB",
+      "pax": "1",
+      "customerString": "gaia",
+      "pickupTime": "12:00 - 12:30",
+      "pickupPoint": "CATBA BUFFALO HOSTEL",
+      "dropPoint": ""
+    }
+  },
+  {
+    "id": 29,
+    "raw": "EM  GỬI  2   PAX   CB - NB    CHUYẾN  3:30PM   NGÀY   24/11\nTÊN :  marlene  x  2pax\nCODE:      4258\nĐÓN:  CATBA BUFFALO HOSTEL",
+    "form": "Thế Long Travel xác nhận booking\nĐại lý             : BUFFALO 4258\nCode             : TL241126\nNgày đi         : 24/11/2026\nLịch trình      : CB - NB\nLoại xe           : Bus\nSố lượng khách   : 2\nTên khách        : Marlene\nGiờ đón            : 15:20 - 15:40\nĐiểm đón         : Catba Buffalo Hostel\nĐiểm trả           : the long \nGiá vé               :\nNote                 : \nLưu ý : Các điểm bao gồm đón bên em hẹn đón theo thời gian quy định đã hẹn nếu khách không chuẩn bị kịp thì đại lí báo khách tự đến văn phòng hộ bên e\nFelix xác nhận bk\nAnh chị vui lòng check lại thông tin giúp em, em cảm ơn ạ",
+    "expected": {
+      "travelDate": "24/11/2026",
+      "route": "CB - NB",
+      "pax": "2",
+      "customerString": "Marlene",
+      "pickupTime": "15:20 - 15:40",
+      "pickupPoint": "Catba Buffalo Hostel",
+      "dropPoint": "the long"
+    }
+  },
+  {
+    "id": 30,
+    "raw": "EM  GỬI  1   PAX   CB - NB    CHUYẾN  8;15AM   NGÀY   24/11\nTÊN :   saoirse \nCODE:       4452\nĐÓN:  CATBA BUFFALO HOSTEL",
+    "form": "@Thanh Phương Thế Long Travel xác nhận booking\nĐại lý                 : BUFFALO 4452\nCode                   : tl241126\nNgày đi                : 24/11/2026\nLịch trình             : CB - NB\nLoại xe                : Bus\nSố lượng khách         : 1\nTên khách              : saoirse\nGiờ đón                : 7:45 - 8:15\nĐiểm đón               : CATBA BUFFALO HOSTEL\nĐiểm trả               :\nGiá                    :\nNote                   : Thanh toán khi kế toán gửi công nợ ngày theo dõi\nLưu ý                  : Các điểm bao gồm đón bên em hẹn đón theo thời gian quy định đã hẹn nếu khách không chuẩn bị kịp thì đại lí báo khách tự đến văn phòng hộ bên e\nSAEN xác nhận booking\nAnh chị vui lòng check lại thông tin giúp em, em cảm ơn ạ",
+    "expected": {
+      "travelDate": "24/11/2026",
+      "route": "CB - NB",
+      "pax": "1",
+      "customerString": "saoirse",
+      "pickupTime": "7:45 - 8:15",
+      "pickupPoint": "CATBA BUFFALO HOSTEL",
+      "dropPoint": ""
+    }
+  },
+  {
+    "id": 31,
+    "raw": "EM  GỬI  1   PAX   CB - NB    CHUYẾN  3;30PM   NGÀY   23/11\nTÊN :    Pablo\nCODE:       4139\nĐÓN:  CATBA BUFFALO HOSTEL",
+    "form": "Thế Long Travel xác nhận booking\nĐại lý : BUFFALO HOSTEL 4139\nCode : tl231126\nNgày đi : 23/11/2026\nLịch trình : CB - NB\nLoại xe : Bus\nSố lượng khách : 1\nTên khách : Pablo\nGiờ đón : 15:00 - 15:30\nĐiểm đón : CATBA BUFFALO HOSTEL\nĐiểm trả : Ninh Bình\nGiá :\nNote : Thanh toán khi kế toán gửi công nợ ngày theo dõi\nLưu ý : Các điểm bao gồm đón bên em hẹn đón theo thời gian quy định đã hẹn nếu khách không chuẩn bị kịp thì đại lí báo khách tự đến văn phòng hộ bên e\nlong  xác nhận booking\nAnh chị vui lòng check lại thông tin giúp em, em cảm ơn ạ",
+    "expected": {
+      "travelDate": "23/11/2026",
+      "route": "CB - NB",
+      "pax": "1",
+      "customerString": "Pablo",
+      "pickupTime": "15:00 - 15:30",
+      "pickupPoint": "CATBA BUFFALO HOSTEL",
+      "dropPoint": "Ninh Bình"
+    }
+  },
+  {
+    "id": 32,
+    "raw": "ngày 25/11, bên e book 2 vé đi tour cúc phương , tên khách Murillo Gonzalez Marta ạ",
+    "form": "Thế Long Travel xác nhận booking \nĐại lý             : Hoang minh \nCode             : TL251126\nNgày đi         : 25/11/26\nLịch trình      : CÚC PHƯƠNG\nLoại xe           : minivan\nSố lượng khách   : 2\nTên khách        : Murillo Gonzalez Marta \nGiờ đón            : 8:45 - 9:10\nĐiểm đón         : Hoang minh \nĐiểm trả           : Hoang minh \nGiá vé               : \nNote                 : a/c vui lòng thanh toán bk khi kế toán gửi công nợ theo ngày\nLưu ý                : Các điểm bao gồm đón bên em hẹn đón theo thời gian quy định đã hẹn nếu khách không chuẩn bị kịp thì đại lí báo khách tự đến văn phòng hộ bên em\nFelix xác nhận bk\nAnh chị vui lòng check lại thông tin giúp em, em cảm ơn ạ",
+    "expected": {
+      "travelDate": "25/11/26",
+      "route": "CÚC PHƯƠNG",
+      "pax": "2",
+      "customerString": "Murillo Gonzalez Marta",
+      "pickupTime": "8:45 - 9:10",
+      "pickupPoint": "Hoang minh",
+      "dropPoint": "Hoang minh"
+    }
+  },
+  {
+    "id": 33,
+    "raw": "23/11, cho em book 2 vé từ home lên phố cổ (địa chỉ báo sau) chuyến 6:00pm đón tại home lúc 5:30pm\ntên khách: sofia gonzaga p104",
+    "form": "Thế Long Travel xác nhận booking\nĐại lý : hoang minh\nCode : tl231126\nNgày đi : 23/11/2026\nLịch trình : NB - HN\nLoại xe : Bus\nSố lượng khách : 2\nTên khách : sofia gonzaga p104\nGiờ đón : 17:30 - 18:00\nĐiểm đón : Hoang Minh Villa\nĐiểm trả : phố cổ (địa chỉ báo sau)\nGiá :\nNote : Thanh toán khi kế toán gửi công nợ ngày theo dõi / Đón tại home lúc 5:30pm, chuyến 6:00pm, địa chỉ trả phố cổ báo sau\nLưu ý : Các điểm bao gồm đón bên em hẹn đón theo thời gian quy định đã hẹn nếu khách không chuẩn bị kịp thì đại lí báo khách tự đến văn phòng hộ bên e\nlong  xác nhận booking\nAnh chị vui lòng check lại thông tin giúp em, em cảm ơn ạ",
+    "expected": {
+      "travelDate": "23/11/2026",
+      "route": "NB - HN",
+      "pax": "2",
+      "customerString": "sofia gonzaga p104",
+      "pickupTime": "17:30 - 18:00",
+      "pickupPoint": "Hoang Minh Villa",
+      "dropPoint": "phố cổ (địa chỉ báo sau)"
+    }
+  },
+  {
+    "id": 34,
+    "raw": "Ngày 22/11, bên e book 2 vé bus home - Sapa, chuyến 22h30 ( loại xe 22 cabin ) \nTên khách Bhatnagar Dhruv, p 116 ạ",
+    "form": "Thế Long Travel xác nhận booking\nĐại lý : Hoàng Minh\nCode : TL221126\nNgày đi : 22/11/2026\nLịch trình : Home - Sa Pa (chuyến 22h30)\nLoại xe : Cabin 22 phòng\nSố lượng khách : 2\nTên khách : Bhatnagar Dhruv (P.116)\nGiờ đón : đi chuyến 10h30 đón về vp là lúc 7h pm \nĐiểm đón : P.116 (về văn phòng Thế Long đợi xe)\nĐiểm trả : Sa Pa\nGiá : 1.040.000\nNote : Thanh toán khi kế toán gửi công nợ ngày theo dõi. Xe đón 19:00  về văn phòng Thế Long đợi xe, chuyến 22h30.\nLưu ý : Các điểm bao gồm đón bên em hẹn đón theo thời gian quy định đã hẹn nếu khách không chuẩn bị kịp thì đại lí báo khách tự đến văn phòng hộ bên e\nlong  xác nhận booking\nAnh chị vui lòng check lại thông tin giúp em, em cảm ơn ạ",
+    "expected": {
+      "travelDate": "22/11/2026",
+      "route": "Home - Sa Pa (chuyến 22h30)",
+      "pax": "2",
+      "customerString": "Bhatnagar Dhruv (P.116)",
+      "pickupTime": "đi chuyến 10h30 đón về vp là lúc 7h pm",
+      "pickupPoint": "P.116 (về văn phòng Thế Long đợi xe)",
+      "dropPoint": "Sa Pa"
+    }
+  },
+  {
+    "id": 35,
+    "raw": "Code                    : VNEG24112026\nNgày đi                :  24/11/2026\nLịch trình             :   Ninh Binh -  mai châu\nLoại xe                 : MINIVAN \nSố lượng khách  : 2\nTên khách            Macias Iñigo\nthời gian đón        : 13:15-13:30\nĐiểm đón              :  Tam cốc pamela HSt\ntrả                         little Mai Chau Homestay",
+    "form": "Thế Long Travel xác nhận booking \nĐại lý             : VPL\nCode             : TL241126\nNgày đi         : 24/11/26\nLịch trình      : NB - MC\nLoại xe           :  MINIVAN\nSố lượng khách   : 2\nTên khách        : Macias Iñigo\nGiờ đón            : 12:45 - 13:00\nĐiểm đón         : Tam cốc pamela HSt\nĐiểm trả           :  little Mai Chau Homestay\nGiá vé               : \nNote                 : \nFelix xác nhận bk\nAnh chị vui lòng check lại thông tin giúp em, em cảm ơn ạ",
+    "expected": {
+      "travelDate": "24/11/26",
+      "route": "NB - MC",
+      "pax": "2",
+      "customerString": "Macias Iñigo",
+      "pickupTime": "12:45 - 13:00",
+      "pickupPoint": "Tam cốc pamela HSt",
+      "dropPoint": "little Mai Chau Homestay"
+    }
+  },
+  {
+    "id": 36,
+    "raw": "AAVQ7948\nThứ 4 25 thg 11 2026 · Express 16\nRoute: Hoa Binh to Tam Coc  13:30\nđón :Mac Thanh Homestay\ntrả   Tam Coc Sunshine Hostel\nCác hành khách  3 × Adult\nTali Paz\nAdi Vaknin\nShani Bar\nSố điện thoại: +972528668762",
+    "form": "Thế Long Travel xác nhận booking \nĐại lý             : VPL\nCode             : TL251126\nNgày đi         : 25/11/26\nLịch trình      : MC - NB \nLoại xe           : MINIVAN\nSố lượng khách   : 3\nTên khách        : Tali Paz +972528668762\nGiờ đón            : 13:00 - 13:20\nĐiểm đón         : Mac Thanh Homestay\nĐiểm trả           : Tam Coc Sunshine Hostel\nGiá vé               : \nNote                 :\nFelix xác nhận bk\nAnh chị vui lòng check lại thông tin giúp em, em cảm ơn ạ",
+    "expected": {
+      "travelDate": "25/11/26",
+      "route": "MC - NB",
+      "pax": "3",
+      "customerString": "Tali Paz +972528668762",
+      "pickupTime": "13:00 - 13:20",
+      "pickupPoint": "Mac Thanh Homestay",
+      "dropPoint": "Tam Coc Sunshine Hostel"
+    }
+  },
+  {
+    "id": 37,
+    "raw": "AAVQ7863\nCN 29 thg 11 2026 · Tourist AC\n\nRoute: Quang Ninh to Tam Coc [Tourist AC]  12:30\nđón  Ha Long Happy Travel Tuan Chau\ntrả Tam Coc Sunshine Hostel\nCác hành khách  2 × Adult\nDragos Neamtu\nMaria Sorana Pircalabu\nSố điện thoại: +40729061347",
+    "form": "Thế Long Travel xác nhận booking \nĐại lý             : VPL\nCode             : TL291126\nNgày đi         : 29/11/26\nLịch trình      : HL - NB \nLoại xe           : BUS\nSố lượng khách   : 2\nTên khách        : Dragos Neamtu +40729061347\nGiờ đón            : 11:45 - 12:10\nĐiểm đón         : Ha Long Happy Travel\nĐiểm trả           :  Tam Coc Sunshine Hostel\nGiá vé               : \nNote                 :\nFelix xác nhận bk\nAnh chị vui lòng check lại thông tin giúp em, em cảm ơn ạ@Vneasygotravelg",
+    "expected": {
+      "travelDate": "29/11/26",
+      "route": "HL - NB",
+      "pax": "2",
+      "customerString": "Dragos Neamtu +40729061347",
+      "pickupTime": "11:45 - 12:10",
+      "pickupPoint": "Ha Long Happy Travel",
+      "dropPoint": "Tam Coc Sunshine Hostel"
+    }
+  },
+  {
+    "id": 38,
+    "raw": "Xác nhận đặt chỗ\nMã đặt chỗ: R4985\nNgày khởi hành: 25 tháng 11 năm 2026\nLịch trình: bus Ninh Bình - Cát Bà (đã bao gồm vé phà)\nLoại phương tiện: bus \nSố lượng hành khách: 1\nTên hành khách: Pasquale Scarano +39 340 735 3382\nThời gian đón: 6:40 - 7:00\nĐiểm đón: Tam Coc Sunseekers Homestay 2\nĐiểm trả: Cat Ba Love House\nnote : thu khách 250k",
+    "form": "@Vneasygotravel Thế Long Travel xác nhận booking\nĐại lý                 : VPL  R4985\nCode                 : tl251126\nNgày đi             : 25/11/2026\nLịch trình          : NB - CB\nLoại xe               : bus\nSố lượng khách      : 1\nTên khách          : Pasquale Scarano +39 340 735 3382\nGiờ đón              : 6:40 - 7:00\nĐiểm đón           : Tam Coc Sunseekers Homestay 2\nĐiểm trả             : Cat Ba Love House\nGiá                       : \nNote                    : thu khách 250k \nLưu ý                   : Các điểm bao gồm đón bên em hẹn đón theo thời gian quy định đã hẹn nếu khách không chuẩn bị kịp thì đại lí báo khách tự đến văn phòng hộ bên e\nSAEN xác nhận booking\nAnh chị vui lòng check lại thông tin giúp em, em cảm ơn ạ",
+    "expected": {
+      "travelDate": "25/11/2026",
+      "route": "NB - CB",
+      "pax": "1",
+      "customerString": "Pasquale Scarano +39 340 735 3382",
+      "pickupTime": "6:40 - 7:00",
+      "pickupPoint": "Tam Coc Sunseekers Homestay 2",
+      "dropPoint": "Cat Ba Love House"
+    }
+  },
+  {
+    "id": 39,
+    "raw": "#AAVQ4897\nThứ 4 25 thg 11 2026 · Tourist AC\n\nRoute: Tam Coc to Dao Cat Ba\n09:30\n4h 30m\n14:00\nTam Coc Sunshine Hostel\n243 Nui Ngoc\nCác hành khách\n1 × Adult\nLukas Raffael Gromes\nAdult\nSố điện thoại\n+4917676989924\nE-mail\nlukas.gromes@web.de",
+    "form": "Thế Long Travel xác nhận booking\nĐại lý              : vpl AAVQ4897\nCode              : TL251126\nNgày đi         : 25/11/2026\nLịch trình      : NB - CB\nLoại xe           : BUS\nSố lượng khách  : 1\nTên khách       : Lukas Raffael Gromes +4917676989924\nGiờ đón           : 9:00 - 9:35\nĐiểm đón        : Tam Coc Sunshine Hostel\nĐiểm trả          : 243 Nui Ngoc\nGiá vé              :\nNote                : Thanh toán khi kế toán gửi công nợ ngày theo dõi\nlong xác nhận bk\nAnh chị vui lòng check lại thông tin giúp em, em cảm ơn ạ",
+    "expected": {
+      "travelDate": "25/11/2026",
+      "route": "NB - CB",
+      "pax": "1",
+      "customerString": "Lukas Raffael Gromes +4917676989924",
+      "pickupTime": "9:00 - 9:35",
+      "pickupPoint": "Tam Coc Sunshine Hostel",
+      "dropPoint": "243 Nui Ngoc"
+    }
+  },
+  {
+    "id": 40,
+    "raw": "EM  GỬI  1   PAX   CB - NB    CHUYẾN  12:30PM   NGÀY   21/11\nTÊN : ANTONIA\nCODE:   4439\nĐÓN:  CATBA BUFFALO HOSTE",
+    "form": "Thế Long Travel xác nhận booking\nĐại lý             : BUFFALO 4439\nCode             : TL211126\nNgày đi         : 21/11/2026\nLịch trình      : CB - NB\nLoại xe           : Bus\nSố lượng khách   : 1\nTên khách        : ANTONIA\nGiờ đón            : 12:20 - 12:40\nĐiểm đón         : CATBA BUFFALO HOSTEL\nĐiểm trả           : the long\nGiá vé               :\nNote                 : \nLưu ý                : Các điểm bao gồm đón bên em hẹn đón theo thời gian quy định đã hẹn nếu khách không chuẩn bị kịp thì đại lí báo khách tự đến văn phòng hộ bên em\nFelix xác nhận bk\nAnh chị vui lòng check lại thông tin giúp em, em cảm ơn ạ",
+    "expected": {
+      "travelDate": "21/11/2026",
+      "route": "CB - NB",
+      "pax": "1",
+      "customerString": "ANTONIA",
+      "pickupTime": "12:20 - 12:40",
+      "pickupPoint": "CATBA BUFFALO HOSTEL",
+      "dropPoint": "the long"
+    }
+  },
+  {
+    "id": 41,
+    "raw": "EM  GỬI  1 PAX   CB - NB    CHUYẾN  3:30PM   NGÀY   20/11\nTÊN : DEEPTHI \nCODE:   3123\nĐÓN:  CATBA BUFFALO HOSTE",
+    "form": "Thế Long Travel xác nhận booking\nĐại lý :  BUFFALO 3123\nCode : tl201126\nNgày đi : 20/11/2026\nLịch trình : CB - NB\nLoại xe :\nSố lượng khách : 1\nTên khách : DEEPTHI\nGiờ đón : 15:00 - 15:30\nĐiểm đón : CATBA BUFFALO HOSTEL\nĐiểm trả :\nGiá :\nNote : Thanh toán khi kế toán gửi công nợ ngày theo dõi\nLưu ý : Các điểm bao gồm đón bên em hẹn đón theo thời gian quy định đã hẹn nếu khách không chuẩn bị kịp thì đại lí báo khách tự đến văn phòng hộ bên e\nSAEN xác nhận booking\nAnh chị vui lòng check lại thông tin giúp em, em cảm ơn ạ",
+    "expected": {
+      "travelDate": "20/11/2026",
+      "route": "CB - NB",
+      "pax": "1",
+      "customerString": "DEEPTHI",
+      "pickupTime": "15:00 - 15:30",
+      "pickupPoint": "CATBA BUFFALO HOSTEL",
+      "dropPoint": ""
+    }
+  }
+]

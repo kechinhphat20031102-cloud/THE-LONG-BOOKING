@@ -1,0 +1,20 @@
+Nguồn: DATA SET.docx — 41 cặp đầu vào/kết quả.
+Đã chuyển các quy tắc xác định được sang parser.js; không huấn luyện model, không gọi Gemini.
+Ngày cập nhật: 24/11/2026.
+
+Quyết định người dùng: Buffalo chuyến 12:30 mặc định hẹn 12:00 - 12:30, ưu tiên hơn các mẫu 21,26,40.
+
+Những điều không tự suy đoán:
+- Mẫu 2 không có ngày: để trống ngày thay vì gán 23/11/2026.
+- Mẫu 11 không có tên johann: không gán tên này cho khách mới.
+- Tin không có đại lý/địa chỉ như Hoang Minh, Lotus Field, 228 1/4: không lấy dữ liệu đó gán chung.
+- Buffalo 15:30 có hai khoảng hẹn; giữ 15:00 - 15:30 và hiện cảnh báo.
+- Buffalo 08:15: dataset khác quy tắc cũ; hiện cảnh báo, chưa đổi mặc định.
+- Giữ đầy đủ địa chỉ và các điểm trả nếu tin gốc có nhiều điểm, thay vì xóa bớt để giống đáp án.
+
+Kiểm tra:
+node test_dataset.js
+node test_booking_matrix.js
+node test_regressions.js
+
+dataset_validation_report.json ghi rõ các chênh lệch còn lại, không phải tất cả kết quả đều khớp nguyên văn.
