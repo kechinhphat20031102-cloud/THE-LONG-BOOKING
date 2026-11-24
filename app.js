@@ -41,6 +41,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     await BookingHistory.initialize();
     confirmedBookings = BookingHistory.load();
     nextBookingId = Math.max(0, ...confirmedBookings.map(b => b.id)) + 1;
+    // Tự động đồng bộ giữa các máy qua mạng LAN / SQLite server
+    BookingHistory.startAutoSync(updated => {
+      confirmedBookings = updated;
+      nextBookingId = Math.max(0, ...confirmedBookings.map(b => b.id)) + 1;
+      renderConfirmedList();
+    });
   } catch (error) {
     historyWritable = false;
     document.getElementById('historySaveStatus').textContent = error.message;
@@ -172,6 +178,11 @@ document.addEventListener('DOMContentLoaded', async () => {
       sheetStatusText.textContent = `Sheet ${currentTabKey}: ${extracted.length} cuốc xe`;
       showToast(`🟢 Đã nạp ${extracted.length} cuốc xe ngày ${currentTabKey}`);
 
+      if (typeof window.onGoogleSheetDataLoadedOnce === 'function') {
+        window.onGoogleSheetDataLoadedOnce();
+        window.onGoogleSheetDataLoadedOnce = null;
+      }
+
       // Nếu đang chờ đối soát sau khi load tab
       if (pendingSearchAfterLoad) {
         pendingSearchAfterLoad = false;
@@ -235,6 +246,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     const existingContainer = document.getElementById('bookingItemsContainer');
     if (existingContainer) existingContainer.remove();
 
+    // Cập nhật thống kê tổng kết ngày
+    const totalCount = visibleBookings.length;
+    const totalPax = visibleBookings.reduce((sum, b) => sum + (parseInt(b.parsed?.pax, 10) || 1), 0);
+    const foundCount = visibleBookings.filter(b => b.checkStatus === 'found').length;
+    const notfoundCount = visibleBookings.filter(b => b.checkStatus === 'notfound').length;
+
+    const elTotal = document.getElementById('summaryTotal');
+    const elFound = document.getElementById('summaryFound');
+    const elNotFound = document.getElementById('summaryNotFound');
+    if (elTotal) elTotal.textContent = `${totalCount} cuốc (${totalPax} khách)`;
+    if (elFound) elFound.textContent = `✓ Đã lên Sheet: ${foundCount}`;
+    if (elNotFound) elNotFound.textContent = `▲ Chưa thấy: ${notfoundCount}`;
+
     if (visibleBookings.length === 0) {
       emptyState.style.display = '';
       confirmedCount.textContent = '0 cuốc';
@@ -242,8 +266,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     emptyState.style.display = 'none';
 
-    const checkedCount = visibleBookings.filter(b => b.checkStatus === 'found').length;
-    confirmedCount.textContent = `${visibleBookings.length} cuốc (${checkedCount}/${visibleBookings.length} đã đối soát)`;
+    confirmedCount.textContent = `${totalCount} cuốc (${foundCount}/${totalCount} đã đối soát)`;
 
     const container = document.createElement('div');
     container.id = 'bookingItemsContainer';
@@ -728,6 +751,87 @@ document.addEventListener('DOMContentLoaded', async () => {
     selectedHistoryDay = event.target.value;
     renderConfirmedList();
   });
+
+  // ===== ĐỐI SOÁT TOÀN BỘ CUỐC TRONG NGÀY =====
+  async function handleCheckAllDay() {
+    const visibleBookings = BookingHistory.forDay(confirmedBookings, selectedHistoryDay);
+    if (!visibleBookings.length) {
+      showToast('Không có cuốc nào trong ngày để đối soát.', false);
+      return;
+    }
+    showToast(`Đang đối soát ${visibleBookings.length} cuốc với Google Sheet...`);
+    
+    for (const bk of visibleBookings) {
+      bk.checkStatus = 'checking';
+    }
+    renderConfirmedList();
+
+    // Nhóm các cuốc theo Tab ngày Google Sheet để tối ưu tải
+    const tabsMap = {};
+    visibleBookings.forEach(bk => {
+      const tab = bk.dayMonthKey || '';
+      tabsMap[tab] = tabsMap[tab] || [];
+      tabsMap[tab].push(bk);
+    });
+
+    for (const [tabKey, bks] of Object.entries(tabsMap)) {
+      if (tabKey && SHEET_TABS[tabKey] && tabKey !== currentTabKey) {
+        tabSelect.value = tabKey;
+        await new Promise(resolve => {
+          const timer = setTimeout(resolve, 4000);
+          window.onGoogleSheetDataLoadedOnce = () => { clearTimeout(timer); resolve(); };
+          loadSheetTab(tabKey);
+        });
+      }
+      bks.forEach(bk => performCrossCheck(bk));
+    }
+
+    renderConfirmedList();
+    const found = visibleBookings.filter(b => b.checkStatus === 'found').length;
+    const notFound = visibleBookings.length - found;
+    showToast(`Đối soát xong: ${found}/${visibleBookings.length} cuốc đã có trên Sheet${notFound > 0 ? `, ${notFound} cuốc chưa thấy!` : '!'}`);
+  }
+
+  // ===== SAO CHÉP BÁO CÁO TỔNG KẾT NGÀY ĐỂ GỬI ZALO =====
+  function handleCopyDailySummary() {
+    const visibleBookings = BookingHistory.forDay(confirmedBookings, selectedHistoryDay);
+    if (!visibleBookings.length) {
+      showToast('Không có cuốc nào trong ngày để làm báo cáo.', false);
+      return;
+    }
+    const totalCount = visibleBookings.length;
+    const totalPax = visibleBookings.reduce((sum, b) => sum + (parseInt(b.parsed?.pax, 10) || 1), 0);
+    const foundCount = visibleBookings.filter(b => b.checkStatus === 'found').length;
+    const notfoundCount = visibleBookings.filter(b => b.checkStatus === 'notfound').length;
+
+    const dParts = selectedHistoryDay.split('-');
+    const formattedDay = `${dParts[2]}/${dParts[1]}/${dParts[0]}`;
+
+    let report = `📊 BÁO CÁO ĐIỀU HÀNH THẾ LONG TRAVEL - NGÀY ${formattedDay}\n`;
+    report += `========================================\n`;
+    report += `• Tổng số cuốc đã chốt: ${totalCount} cuốc (${totalPax} khách)\n`;
+    report += `• Đã có trên Sheet: ${foundCount}/${totalCount} cuốc\n`;
+    if (notfoundCount > 0) {
+      report += `• ⚠️ CHƯA THẤY TRÊN SHEET: ${notfoundCount} cuốc (Cần bổ sung ngay!)\n`;
+    }
+    report += `========================================\n`;
+    report += `DANH SÁCH CHI TIẾT TỪNG CUỐC:\n`;
+
+    visibleBookings.forEach((b, idx) => {
+      const p = b.parsed || {};
+      const statusText = b.checkStatus === 'found' ? '✓ ĐÃ LÊN SHEET' : (b.checkStatus === 'notfound' ? '▲ CHƯA THẤY' : '• Chưa đối soát');
+      report += `${idx + 1}. [${p.travelDate || b.dayMonthKey || ''}] ${p.customerString || ''} (${p.pax || 1}k)\n`;
+      report += `   - Tuyến: ${p.route || ''} | Xe: ${p.vehicle || ''}\n`;
+      report += `   - Đón: ${p.pickupPoint || ''} (${p.pickupTime || ''}) -> Trả: ${p.dropPoint || ''}\n`;
+      report += `   - Đại lý: ${p.agency || ''} | Trạng thái: [${statusText}]\n`;
+    });
+
+    copyText(report, `Đã sao chép Báo cáo tổng kết ngày ${formattedDay}!`);
+  }
+
+  document.getElementById('btnCheckAllDay')?.addEventListener('click', handleCheckAllDay);
+  document.getElementById('btnCopyDailySummary')?.addEventListener('click', handleCopyDailySummary);
+
   btnClearAll.addEventListener('click', () => {
     if (!confirm('Xóa các booking trong ngày đang xem? Các ngày khác vẫn được giữ.')) return;
     confirmedBookings = confirmedBookings.filter(b => b.confirmedDay !== selectedHistoryDay);

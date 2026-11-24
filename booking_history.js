@@ -62,7 +62,33 @@ const BookingHistory = {
     }
     return result;
   },
-  forDay(bookings, day) { return bookings.filter(b=>b.confirmedDay === day); }
+  forDay(bookings, day) { return bookings.filter(b=>b.confirmedDay === day); },
+  async poll() {
+    if (!this.remote) return null;
+    try {
+      const response = await fetch('/api/history', {cache:'no-store'});
+      if (!response.ok) return null;
+      const data = await response.json();
+      if (data.revision !== this.revision) {
+        this.cache = this.validate(data.bookings);
+        this.revision = data.revision;
+        this.lastSaved = JSON.stringify(this.cache);
+        return this.load();
+      }
+    } catch (_) {}
+    return null;
+  },
+  startAutoSync(callback, intervalMs = 4000) {
+    if (typeof window === 'undefined') return;
+    const tick = async () => {
+      const updated = await this.poll();
+      if (updated && typeof callback === 'function') {
+        callback(updated);
+      }
+    };
+    setInterval(tick, intervalMs);
+    window.addEventListener('focus', tick);
+  }
 };
 if (typeof module !== 'undefined') module.exports = BookingHistory;
 if (typeof window !== 'undefined') window.BookingHistory = BookingHistory;

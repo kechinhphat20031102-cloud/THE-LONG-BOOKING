@@ -261,11 +261,32 @@
         </div>
 
         <div class="flex flex-wrap items-center gap-2 text-xs mb-3">
-          <label for="historyDay">Ngày xác nhận:</label>
-          <select id="historyDay" class="border rounded-lg p-2 bg-white"></select>
-          <button id="exportHistory" type="button" class="border rounded-lg p-2">Xuất lịch sử / bản sao</button>
-          <label class="border rounded-lg p-2 cursor-pointer">Nhập lịch sử cũ<input id="importHistory" type="file" accept=".json,application/json" class="hidden"></label>
-          <span id="historySaveStatus" role="status" class="text-slate-500">Lưu trên trình duyệt này</span>
+          <label for="historyDay" class="font-bold text-slate-700">Ngày xác nhận:</label>
+          <select id="historyDay" class="border rounded-lg p-2 bg-white font-medium"></select>
+          <button id="btnCheckAllDay" type="button" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-2 rounded-lg transition flex items-center gap-1.5 shadow-sm" title="Tự động kiểm tra đối soát tất cả các cuốc trong ngày đang chọn với Google Sheet">
+            <i class="fa-solid fa-bolt"></i> Đối soát cả ngày
+          </button>
+          <button id="btnCopyDailySummary" type="button" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-3 py-2 rounded-lg transition flex items-center gap-1.5 shadow-sm" title="Sao chép báo cáo thống kê tất cả các cuốc trong ngày để gửi Zalo">
+            <i class="fa-solid fa-clipboard-list"></i> Báo cáo tổng kết ngày
+          </button>
+          <button id="exportHistory" type="button" class="border border-slate-300 hover:bg-slate-50 rounded-lg p-2">Xuất bản sao</button>
+          <label class="border border-slate-300 hover:bg-slate-50 rounded-lg p-2 cursor-pointer">Nhập lịch sử cũ<input id="importHistory" type="file" accept=".json,application/json" class="hidden"></label>
+          <span id="historySaveStatus" role="status" class="text-slate-500 text-[11px] w-full">Lưu trên trình duyệt này</span>
+        </div>
+
+        <!-- THẺ TỔNG KẾT CUỐI NGÀY -->
+        <div id="dailySummaryCard" class="bg-emerald-50/80 border border-emerald-200 rounded-xl p-3 text-xs flex flex-wrap items-center justify-between gap-2 mb-3">
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="font-bold text-slate-800 flex items-center gap-1.5">
+              <i class="fa-solid fa-chart-pie text-emerald-600"></i> Tổng kết:
+            </span>
+            <span id="summaryTotal" class="bg-white px-2 py-0.5 rounded border border-slate-200 font-bold text-slate-700">0 cuốc (0 khách)</span>
+            <span id="summaryFound" class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded border border-emerald-300 font-bold">✓ Đã lên Sheet: 0</span>
+            <span id="summaryNotFound" class="bg-rose-100 text-rose-800 px-2 py-0.5 rounded border border-rose-300 font-bold">▲ Chưa thấy: 0</span>
+          </div>
+          <span class="text-[11px] text-emerald-700 font-semibold flex items-center gap-1">
+            <i class="fa-solid fa-network-wired"></i> Đồng bộ SQLite mạng LAN
+          </span>
         </div>
         <!-- Danh sách (nhóm theo ngày) -->
         <div id="confirmedList" class="flex flex-col gap-3 custom-scrollbar overflow-y-auto" style="max-height: 420px;">

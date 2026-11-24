@@ -36,9 +36,25 @@ class Handler(BaseHTTPRequestHandler):
     def reply(self, status, data):
         body = json.dumps(data, ensure_ascii=False).encode()
         self.send_response(status); self.send_header('Content-Type','application/json; charset=utf-8'); self.send_header('Cache-Control','no-store'); self.end_headers(); self.wfile.write(body)
+    def is_local_or_lan(self, host_or_origin):
+        import ipaddress, urllib.parse
+        if not host_or_origin: return False
+        if host_or_origin.startswith(('http://', 'https://')):
+            parsed = urllib.parse.urlparse(host_or_origin)
+            host = parsed.hostname or ''
+            port = parsed.port or (443 if parsed.scheme == 'https' else 80)
+            if port != self.server.server_port: return False
+        else:
+            host = host_or_origin.split(':')[0]
+        if host in {'127.0.0.1', 'localhost'}: return True
+        try:
+            ip = ipaddress.ip_address(host)
+            return ip.is_private or ip.is_loopback
+        except ValueError:
+            return host.endswith('.local')
     def allowed(self):
         host = self.headers.get('Host','')
-        return host in {f'127.0.0.1:{self.server.server_port}',f'localhost:{self.server.server_port}'}
+        return self.is_local_or_lan(host)
     def do_GET(self):
         if not self.allowed(): return self.reply(403, {'error':'Invalid host'})
         route = self.path.split('?')[0]
@@ -52,8 +68,9 @@ class Handler(BaseHTTPRequestHandler):
         body = (ROOT / asset).read_bytes()
         self.send_response(200); self.send_header('Content-Type','text/html; charset=utf-8' if asset.endswith('.html') else 'text/javascript; charset=utf-8'); self.send_header('Cache-Control','no-store'); self.end_headers(); self.wfile.write(body)
     def do_PUT(self):
-        if not self.allowed() or self.headers.get('Origin') not in {f'http://127.0.0.1:{self.server.server_port}', f'http://localhost:{self.server.server_port}'}:
-            return self.reply(403, {'error':'Chỉ cho phép ghi từ trang ứng dụng local.'})
+        origin = self.headers.get('Origin', '')
+        if not self.allowed() or not self.is_local_or_lan(origin):
+            return self.reply(403, {'error':'Chỉ cho phép ghi từ trang ứng dụng local/mạng nội bộ.'})
         if self.path != '/api/history': return self.reply(404, {'error':'Not found'})
         try:
             size = int(self.headers.get('Content-Length','0'))
@@ -75,20 +92,43 @@ class Handler(BaseHTTPRequestHandler):
         except (ValueError,KeyError,TypeError,json.JSONDecodeError) as e: self.reply(400, {'error':str(e)})
         except Exception: self.reply(500, {'error':'Không ghi được SQLite. Kiểm tra dung lượng và quyền thư mục.'})
 
-def make_server(port=8765, db_path=None):
-    server = ThreadingHTTPServer(('127.0.0.1',port), Handler)
+def get_local_ip():
+    import socket
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        s.connect(('8.8.8.8', 80))
+        ip = s.getsockname()[0]
+    except Exception:
+        ip = '127.0.0.1'
+    finally:
+        s.close()
+    return ip
+
+def make_server(port=8765, db_path=None, host='127.0.0.1'):
+    server = ThreadingHTTPServer((host, port), Handler)
     server.db_path = Path(db_path) if db_path else ROOT / 'data' / 'bookings.sqlite'
     with database(server.db_path): pass
     return server
 
 if __name__ == '__main__':
     p=argparse.ArgumentParser(); p.add_argument('--open',action='store_true'); p.add_argument('--port',type=int,default=8765); args=p.parse_args()
-    url=f'http://127.0.0.1:{args.port}/'
-    try: server=make_server(args.port)
+    local_ip = get_local_ip()
+    url = f'http://127.0.0.1:{args.port}/'
+    lan_url = f'http://{local_ip}:{args.port}/'
+    try: server = make_server(args.port, host='0.0.0.0')
     except OSError:
         with urllib.request.urlopen(url+'api/health',timeout=3) as res:
             if json.load(res).get('app') != 'thelong-booking': raise RuntimeError('Port occupied')
         if args.open: webbrowser.open(url)
     else:
+        print("="*60)
+        print("THẾ LONG TRAVEL - HỆ THỐNG ĐIỀU HÀNH & ĐỒNG BỘ BOOKING")
+        print("="*60)
+        print("Máy chủ đang chạy và sẵn sàng đồng bộ giữa các máy:")
+        print(f"👉 Trên máy chủ này: {url}")
+        print(f"👉 Các máy khác gõ:   {lan_url}  (chung Wifi/LAN)")
+        print(f"\nDữ liệu lưu chung tại: data/bookings.sqlite")
+        print("Tất cả các máy truy cập đều dùng chung 1 lịch sử booking!")
+        print("="*60)
         if args.open: webbrowser.open(url)
         server.serve_forever()
