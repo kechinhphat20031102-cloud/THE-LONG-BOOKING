@@ -1,0 +1,27 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Trình duyệt mở web tự đăng nhập ẩn danh (không cần tài khoản nhân viên).
+    // Chỉ cho đọc/ghi collection "bookings", và mỗi bản ghi phải đúng khuôn dạng.
+    match /bookings/{bookingId} {
+      allow read, delete: if request.auth != null;
+      allow create, update: if request.auth != null
+        && request.resource.data.keys().hasOnly(['json', 'confirmedDay', 'updatedAt'])
+        && request.resource.data.json is string
+        && request.resource.data.json.size() < 200000
+        && request.resource.data.confirmedDay is string
+        && request.resource.data.confirmedDay.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$');
+    }
+    // Mẫu "Lưu mẫu đã sửa để học", dùng chung cho mọi máy.
+    match /examples/{exampleId} {
+      allow read, delete: if request.auth != null;
+      allow create, update: if request.auth != null
+        && request.resource.data.keys().hasOnly(['json', 'updatedAt'])
+        && request.resource.data.json is string
+        && request.resource.data.json.size() < 60000;
+    }
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

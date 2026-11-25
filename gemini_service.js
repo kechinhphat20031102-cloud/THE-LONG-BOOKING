@@ -373,7 +373,7 @@ ${staff} xác nhận booking
 Anh chị vui lòng check lại thông tin giúp em, em cảm ơn ạ`;
 
     // 4 Cột Excel: ĐIỂM ĐÓN [Tab] ĐIỂM TRẢ [Tab] TÊN/CODE [Tab] SL
-    const excel4Cols = `${pickupPoint}\t${dropPoint}\t${customerString}\t${pax}`;
+    const excel4Cols = `${pickupPoint}\t${dropPoint}\t${customerString}\t${pax}\t${agency}`;
 
     return {
       topMention,

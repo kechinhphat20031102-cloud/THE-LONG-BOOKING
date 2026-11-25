@@ -20,3 +20,7 @@ node_modules/
 # OS files
 .DS_Store
 Thumbs.db
+
+# API keys (không đưa lên GitHub)
+.*_key.txt
+*_key.txt

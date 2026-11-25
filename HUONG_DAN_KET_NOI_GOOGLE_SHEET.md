@@ -1,44 +1,36 @@
-# HƯỚNG DẪN KẾT NỐI HỆ THỐNG VỚI GOOGLE SHEET (THẾ LONG TRAVEL)
+# HƯỚNG DẪN ĐỐI SOÁT VỚI GOOGLE SHEET (THẾ LONG TRAVEL)
 
-Cơ chế này giúp giải quyết dứt điểm vấn đề: **"Xác nhận trên Zalo xong nhưng quên không vào Google Sheet"**.
-
----
-
-## ⚡ NGUYÊN LÝ HOẠT ĐỘNG:
-Khi nhân viên dán booking vào Web và bấm:
-👉 **[ ⚡ XÁC NHẬN & ĐẨY VÀO GOOGLE SHEET NGAY ]**
-
-1. **Hệ thống tự động bắn dữ liệu vào file Google Sheet "Lệnh Điều Xe" (Ảnh 3)** trước tiên.
-2. Khi Google Sheet xác nhận đã lưu thành công, hệ thống **tự động sao chép form xác nhận Zalo** vào bộ nhớ tạm.
-3. Nhân viên chỉ việc quay sang Zalo bấm `Ctrl + V` gửi cho khách/đại lý.
-4. **Không bao giờ có chuyện gửi tin Zalo rồi mà sót cuốc trong Google Sheet!**
+Web **chỉ đọc** Google Sheet "Lệnh Điều Xe" để đối soát. Web **không ghi** gì vào Sheet. Nhân viên vẫn nhập cuốc vào Sheet bằng tay như bình thường.
 
 ---
 
-## 🛠️ CÁC BƯỚC CÀI ĐẶT (CHỈ MẤT 1 PHÚT - LÀM 1 LẦN DUY NHẤT):
+## ⚡ CÁCH HOẠT ĐỘNG
 
-### Bước 1: Mở Apps Script trong Google Sheet của bạn
-1. Mở file Google Sheet **"Lệnh Điều Xe"** của Thế Long Travel trên trình duyệt.
-2. Trên thanh menu trên cùng, bấm: **Tiện ích mở rộng (Extensions)** $\rightarrow$ **Apps Script**.
+1. Dán tin booking vào web, bấm tạo form. Web tự nhận ngày đi và chuyển sang tab ngày đó (ví dụ `25/11`).
+2. Web tải dữ liệu tab đó từ Google Sheet (chế độ chỉ xem).
+3. Bấm **Kiểm tra / Đối soát**: web tìm cuốc trên Sheet theo:
+   - **Số điện thoại** (so 9 số cuối), hoặc
+   - **Tên khách**: phải trùng **đủ tất cả các chữ** trong tên (bỏ qua Mr/Mrs/anh/chị…). Trùng một chữ như "Nguyen" thì không tính.
+   - Mã đặt chỗ, đại lý, điểm đón: khi chọn các tiêu chí đó.
+4. Kết quả:
+   - ✅ **Đã có trên Sheet**: tìm thấy cuốc khớp.
+   - ⚠️ **Chưa thấy**: cần kiểm tra lại với điều hành.
+   - ⚠️ **Chưa đối soát được ngày …**: không tải được tab của ngày đó (xem bên dưới).
 
-### Bước 2: Dán mã kết nối
-1. Xóa hết code trắng mặc định.
-2. Mở file [google_apps_script.js](file:///c:/Users/Mon/Desktop/system%20booking/google_apps_script.js) trong thư mục này, copy toàn bộ nội dung và dán vào.
-3. Bấm biểu tượng **Lưu (Save - hình đĩa mềm)**.
+---
 
-### Bước 3: Triển khai Webhook
-1. Ở góc trên bên phải, bấm nút xanh **Triển khai (Deploy)** $\rightarrow$ Chọn **Tùy chọn triển khai mới (New deployment)**.
-2. Bấm vào biểu tượng bánh răng ⚙️ bên cạnh "Chọn loại" $\rightarrow$ Chọn **Ứng dụng web (Web app)**.
-3. Điền cấu hình như sau:
-   - **Mô tả:** Đồng bộ Booking Thế Long
-   - **Thực thi dưới dạng (Execute as):** `Tôi` (Địa chỉ email của bạn)
-   - **Ai có quyền truy cập (Who has access):** `Bất kỳ ai` (Anyone)  *(BẮT BUỘC CHỌN CÁI NÀY để Web đẩy được dữ liệu vào Sheet)*.
-4. Bấm nút **Triển khai (Deploy)**.
-5. Google sẽ hiện bảng cấp quyền $\rightarrow$ Bấm **Xem lại quyền** $\rightarrow$ Chọn tài khoản của bạn $\rightarrow$ Bấm **Nâng cao (Advanced)** $\rightarrow$ Bấm **Đi tới... (không an toàn)** $\rightarrow$ Bấm **Cho phép (Allow)**.
+## 🛠️ YÊU CẦU VỚI GOOGLE SHEET
 
-### Bước 4: Dán link vào Web App
-1. Copy đường link **"URL của ứng dụng web"** (đường link có đuôi kết thúc bằng `/exec`).
-2. Mở trang Web điều hành lên: Bấm nút **"Kết Nối Google Sheet"** ở góc trên bên phải.
-3. Dán đường link vừa copy vào ô $\rightarrow$ Bấm **"Thử kết nối"** $\rightarrow$ Bấm **"Lưu Cấu Hình"**.
+- Sheet để chế độ **"Bất kỳ ai có đường liên kết đều có thể xem"** (chỉ xem). Không cần quyền sửa.
+- Mỗi ngày một tab, **tên tab đúng dạng `ngày/tháng`, không có số 0 ở đầu**: `1/12`, `25/12`, không viết `01/12`.
+- Dòng đầu tab ghi ngày dạng `NGÀY 1 THÁNG 12 NĂM 2026` như mẫu hiện tại. Web dùng dòng này để chắc chắn đã tải đúng tab. Nếu tab chưa có, Google sẽ trả về tab khác và web sẽ báo lỗi thay vì đối soát nhầm ngày.
 
-Từ lúc này, chấm tròn sẽ chuyển sang **Xanh lá (Đã kết nối sẵn sàng)**. Mọi booking dán vào sẽ tự động bay thẳng vào Google Sheet!
+---
+
+## ⚠️ LƯU Ý BẢO MẬT
+
+Ai có ID Sheet (nằm trong `app.js`) đều xem được Sheet, gồm cả tên và số điện thoại khách. Không gửi link Sheet hoặc link web ra ngoài.
+
+---
+
+File `google_apps_script.js` là phần ghi tự động vào Sheet từ phiên bản cũ. Hiện **không dùng**, không cần cài.

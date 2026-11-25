@@ -18,7 +18,78 @@ const SHEET_TABS = {
 };
 
 // --- State ---
-let currentTabKey          = '24/11';
+let currentTabKey          = '';
+let loadedTabKey           = ''; // tab đã nạp thành công; rỗng khi đang tải hoặc lỗi
+
+// Ngày hôm nay theo giờ Việt Nam, dạng "d/m" (khớp tên tab trong Google Sheet)
+function todayTabKey() {
+  const parts = new Intl.DateTimeFormat('en-GB', {timeZone:'Asia/Ho_Chi_Minh',day:'numeric',month:'numeric'}).formatToParts(new Date());
+  const get = t => parseInt(parts.find(p => p.type === t).value, 10);
+  return `${get('day')}/${get('month')}`;
+}
+
+// ===== SHEET-MATCH START (hàm thuần, có test trong test_sheet_match.js) =====
+function escapeHtml(value) {
+  return String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+// Bỏ dấu, chữ thường, chỉ giữ chữ/số để so tên
+function foldText(value) {
+  return String(value ?? '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd')
+    .replace(/[^a-z0-9]+/g, ' ').trim();
+}
+
+// Danh xưng / từ chung, không dùng để nhận diện khách
+const NAME_STOPWORDS = new Set(['mr','mrs','ms','miss','mx','dr','anh','chi','em','ong','ba','co','chu','bac','khach','pax','nguoi','adult','adults','child','children','and','va','the','tour','booking','code','sdt','tel','phone']);
+
+function nameTokens(value) {
+  return foldText(String(value ?? '').replace(/\+?\d[\d\s.\-]{6,}\d/g, ' '))
+    .split(' ').filter(t => t.length >= 2 && !/^\d+$/.test(t) && !NAME_STOPWORDS.has(t));
+}
+
+function phoneDigits(value) {
+  const m = String(value ?? '').match(/\+?\d[\d\s.\-]{6,}\d/);
+  const d = m ? m[0].replace(/\D/g, '') : '';
+  return d.length >= 8 ? d.slice(-9) : '';
+}
+
+// Khớp khách: cùng SĐT (9 số cuối), hoặc TẤT CẢ các từ trong tên đều có mặt (nguyên từ) ở ô Tên/Code trên Sheet.
+// Trước đây chỉ cần 1 từ trùng (vd "Nguyen") là báo đã có, dễ báo nhầm.
+function matchCustomer(bookingCustomer, sheetCustomer) {
+  const phone = phoneDigits(bookingCustomer);
+  if (phone && phoneDigits(sheetCustomer) === phone) return 'phone';
+  const tokens = nameTokens(bookingCustomer);
+  if (!tokens.length) return '';
+  const sheetWords = new Set(foldText(sheetCustomer).split(' '));
+  if (tokens.length === 1 && tokens[0].length < 3) return '';
+  return tokens.every(t => sheetWords.has(t)) ? 'name' : '';
+}
+// Đọc ngày "NGÀY 26 THÁNG 11" ở các dòng đầu của tab, trả về "26/11" (hoặc '' nếu không thấy)
+function sheetHeaderDate(rows) {
+  for (const row of (rows || []).slice(0, 3)) {
+    for (const c of (row?.c || [])) {
+      const m = /NG[AÀ]Y\s+(\d{1,2})\s+TH[AÁ]NG\s+(\d{1,2})/i.exec(String(c?.v ?? ''));
+      if (m) return `${parseInt(m[1], 10)}/${parseInt(m[2], 10)}`;
+    }
+  }
+  return '';
+}
+// ===== SHEET-MATCH END =====
+
+// Các ngày có thể có tab: tab tháng 11 đã biết gid + từ 7 ngày trước đến 90 ngày tới (giờ Việt Nam).
+// Giới hạn khoảng này để chuỗi như "228 1/4" trong địa chỉ không bị hiểu nhầm thành ngày 1/4.
+function tabKeyWindow() {
+  const keys = new Set(Object.keys(SHEET_TABS));
+  const now = Date.now();
+  for (let i = -7; i <= 90; i++) {
+    const parts = new Intl.DateTimeFormat('en-GB', {timeZone:'Asia/Ho_Chi_Minh',day:'numeric',month:'numeric'}).formatToParts(new Date(now + i * 86400000));
+    keys.add(`${parseInt(parts.find(p => p.type === 'day').value, 10)}/${parseInt(parts.find(p => p.type === 'month').value, 10)}`);
+  }
+  return keys;
+}
+function isValidTabKey(key) {
+  return tabKeyWindow().has(key || '');
+}
 let currentParsedResult    = null;
 let liveSheetRows          = [];
 let pendingSearchAfterLoad = false;
@@ -125,12 +196,25 @@ document.addEventListener('DOMContentLoaded', async () => {
   // ===== TAB SELECT =====
   function initTabSelect() {
     tabSelect.innerHTML = '';
-    Object.keys(SHEET_TABS).sort((a, b) => parseInt(a) - parseInt(b)).forEach(k => {
-      const o = document.createElement('option');
-      o.value = k; o.textContent = k;
-      if (k === currentTabKey) o.selected = true;
-      tabSelect.appendChild(o);
-    });
+    const keys = tabKeyWindow();
+    if (currentTabKey) keys.add(currentTabKey);
+    // Sắp theo thứ tự thời gian, coi tháng nhỏ hơn tháng hiện tại là năm sau
+    const curMonth = +todayTabKey().split('/')[1];
+    const order = k => { const [d, m] = k.split('/').map(Number); return ((m - curMonth + 12) % 12) * 100 + d; };
+    [...keys].sort((a, b) => order(a) - order(b)).forEach(k => addTabOption(k));
+  }
+
+  function addTabOption(k) {
+    if ([...tabSelect.options].some(o => o.value === k)) return;
+    const o = document.createElement('option');
+    o.value = k; o.textContent = k;
+    if (k === currentTabKey) o.selected = true;
+    tabSelect.appendChild(o);
+  }
+
+  function selectTab(k) {
+    addTabOption(k);
+    tabSelect.value = k;
   }
 
   // ===== GOOGLE SHEET JSONP =====
@@ -138,6 +222,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
       if (!json?.table?.rows) throw new Error('Empty');
       const rows = json.table.rows;
+      // Google trả về tab đầu tiên khi không có tab đúng tên, nên phải kiểm tra ngày ghi trên đầu sheet
+      const headDate = sheetHeaderDate(rows);
+      if (headDate && headDate !== currentTabKey) throw new Error(`Tab trả về là ngày ${headDate}, không phải ${currentTabKey}`);
       const row1 = (rows[1]?.c || []).map(c => c?.v || '');
       const row3 = (rows[3]?.c || []).map(c => c?.v || '');
       const row5 = (rows[5]?.c || []).map(c => c?.v || '');
@@ -181,6 +268,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
 
       liveSheetRows = extracted;
+      loadedTabKey = currentTabKey;
       sheetStatusDot.className = 'w-2 h-2 rounded-full bg-emerald-400';
       sheetStatusText.textContent = `Sheet ${currentTabKey}: ${extracted.length} cuốc xe`;
       showToast(`🟢 Đã nạp ${extracted.length} cuốc xe ngày ${currentTabKey}`);
@@ -204,31 +292,46 @@ document.addEventListener('DOMContentLoaded', async () => {
     } catch(e) {
       console.error('JSONP error:', e);
       sheetStatusDot.className = 'w-2 h-2 rounded-full bg-rose-400';
-      sheetStatusText.textContent = `Lỗi tải ngày ${currentTabKey}`;
-      showToast('Không thể tải Google Sheet!', false);
-      pendingSearchAfterLoad = false;
-      pendingCheckBookingId = null;
+      sheetStatusText.textContent = `Không tải được tab ngày ${currentTabKey}`;
+      showToast(`Không tải được tab ngày ${currentTabKey} trên Google Sheet (tab chưa có hoặc sai tên)!`, false);
+      failPendingCheck(currentTabKey);
     }
   };
 
   function loadSheetTab(tabKey) {
     currentTabKey = tabKey;
-    const gid = SHEET_TABS[tabKey] || '1330423694';
+    loadedTabKey = '';
+    liveSheetRows = [];
+    // Tab đã biết gid thì dùng gid; tab mới (tháng 12 trở đi) thì tìm theo tên tab, ví dụ "1/12"
+    const query = SHEET_TABS[tabKey] ? `gid=${SHEET_TABS[tabKey]}` : `sheet=${encodeURIComponent(tabKey)}`;
     sheetStatusDot.className = 'w-2 h-2 rounded-full bg-amber-400 animate-pulse';
     sheetStatusText.textContent = `Đang tải ngày ${tabKey}...`;
     const existing = document.getElementById('gviz-jsonp-script');
     if (existing) existing.remove();
     const s = document.createElement('script');
     s.id  = 'gviz-jsonp-script';
-    s.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=responseHandler:onGoogleSheetDataLoaded&gid=${gid}&_=${Date.now()}`;
+    s.src = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=responseHandler:onGoogleSheetDataLoaded&${query}&_=${Date.now()}`;
     s.onerror = () => {
       sheetStatusDot.className = 'w-2 h-2 rounded-full bg-rose-400';
       sheetStatusText.textContent = `Lỗi kết nối ngày ${tabKey}`;
       showToast('Không thể tải Google Sheet!', false);
-      pendingSearchAfterLoad = false;
-      pendingCheckBookingId = null;
+      failPendingCheck(tabKey);
     };
     document.body.appendChild(s);
+  }
+
+  // Tải tab lỗi: không đối soát với dữ liệu ngày khác, báo rõ cho người dùng
+  function failPendingCheck(tabKey) {
+    const wasPending = pendingSearchAfterLoad;
+    const bk = pendingCheckBookingId !== null ? confirmedBookings.find(b => b.id === pendingCheckBookingId) : null;
+    pendingSearchAfterLoad = false;
+    pendingCheckBookingId = null;
+    if (typeof window.onGoogleSheetDataLoadedOnce === 'function') {
+      window.onGoogleSheetDataLoadedOnce();
+      window.onGoogleSheetDataLoadedOnce = null;
+    }
+    if (bk) { bk.checkStatus = 'pending'; bk.matchLabel = ''; renderConfirmedList(); }
+    if (wasPending) setCheckResult('notfound', `⚠️ Chưa đối soát được ngày ${tabKey}`, 'Không tải được tab ngày này trên Google Sheet. Kiểm tra tab đã được tạo và đặt tên đúng dạng ngày/tháng (ví dụ 1/12).');
   }
 
   // ===== RENDER DANH SÁCH BOOKING (GỘP LẠI, HIỆN NGÀY CẠNH TÊN) =====
@@ -238,7 +341,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       status.textContent = 'Đang lưu…';
       try {
         Promise.resolve(BookingHistory.save(confirmedBookings)).then(() => {
-          status.textContent = BookingHistory.remote ? 'Đã lưu vào data/bookings.sqlite' : 'Đang mở file cũ · Xuất lịch sử rồi mở ứng dụng qua file .bat';
+          status.textContent = BookingHistory.storageLabel ? BookingHistory.storageLabel : BookingHistory.remote ? 'Đã lưu vào data/bookings.sqlite' : 'Đang mở file cũ · Xuất lịch sử rồi mở ứng dụng qua file .bat';
         }).catch(error => { status.textContent = 'CHƯA LƯU: ' + error.message + ' · Xuất bản sao trước khi đóng trang.'; });
       } catch (error) { status.textContent = 'CHƯA LƯU: ' + error.message; }
     }
@@ -349,6 +452,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!text) { showToast('Vui lòng dán nội dung booking vào ô!', false); return; }
 
     const useGemini = isGeminiEnabled();
+    // Phân tích cục bộ: parser + học quy ước từ dataset và các mẫu đã lưu (dataset_learner.js).
+    const parseLocal = () => {
+      const parsed = BookingMemory.learn(text, BookingParser.parse(text, operatorSelect.value));
+      return parsed && typeof DatasetLearner !== 'undefined' ? DatasetLearner.apply(text, parsed) : parsed;
+    };
     let result = null;
     try { result = BookingMemory.recall(text, operatorSelect.value); }
     catch (error) { showToast(`Không đọc được mẫu đã lưu: ${error.message}`, false); return; }
@@ -374,7 +482,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                            err.message?.includes('high demand') || err.message?.includes('timeout') || err.message?.includes('thời gian');
         if (isOverload) {
           showToast('⚡ Gemini đang bận — dùng phân tích cục bộ thay thế.', false);
-          result = BookingMemory.learn(text, BookingParser.parse(text, operatorSelect.value));
+          result = parseLocal();
           if (!result) { showToast('Không thể phân tích dữ liệu booking!', false); return; }
           // Đánh dấu là fallback
           result._geminiError = err.message;
@@ -400,7 +508,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       showToast('Vui lòng cài đặt Gemini API Key để dùng AI!', false);
       return;
     } else {
-      result = BookingMemory.learn(text, BookingParser.parse(text, operatorSelect.value));
+      result = parseLocal();
     }
 
     if (!result) { showToast('Không thể phân tích dữ liệu booking!', false); return; }
@@ -452,17 +560,18 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   function readEditedZalo() {
-    const labels = {'đại lý':'agency','code':'code','ngày đi':'travelDate','lịch trình':'route','loại xe':'vehicle','số lượng khách':'pax','tên khách':'customerString','giờ đón':'pickupTime','điểm đón':'pickupPoint','điểm trả':'dropPoint','giá vé':'price','giá':'price','note':'note'};
+    const labels = {'đại lý':'agency','code':'code','ngày đi':'travelDate','lịch trình':'route','loại xe':'vehicle','số lượng khách':'pax','tên khách':'customerString','thông tin khách':'customerString','mã booking':'code','giá dịch vụ':'price','ghi chú':'note','giờ đón':'pickupTime','điểm đón':'pickupPoint','điểm trả':'dropPoint','giá vé':'price','giá':'price','note':'note'};
     const result = Object.fromEntries(Object.values(labels).map(key => [key, '']));
     for (const line of outputZalo.value.split(/\r?\n/)) {
       const colon = line.indexOf(':');
-      const key = labels[line.slice(0, colon).trim().toLowerCase()];
-      if (colon >= 0 && key) result[key] = line.slice(colon + 1).trim();
+      const key = labels[line.slice(0, colon).replace(/^[^\p{L}]+/u, '').trim().toLowerCase()];
+      if (colon >= 0 && key && !result[key]) result[key] = line.slice(colon + 1).trim();
     }
     const date = /^(\d{1,2})[/.\-](\d{1,2})(?:[/.\-]\d{2,4})?$/.exec(result.travelDate);
     result.dayMonthKey = date ? `${Number(date[1])}/${Number(date[2])}` : '';
+    result.customerString = result.customerString.replace(/\s+[–—]\s+/, ' ');
     result.zaloMsg = outputZalo.value;
-    result.excel4Cols = `${result.pickupPoint}\t${result.dropPoint}\t${result.customerString}\t${result.pax}`;
+    result.excel4Cols = `${result.pickupPoint}\t${result.dropPoint}\t${result.customerString}\t${result.pax}\t${result.agency}`;
     return result;
   }
 
@@ -477,7 +586,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (!await copyText(result.zaloMsg, 'Đã sao chép Form Zalo!')) return;
       let booking = confirmedBookings.find(b => b.id === draft.bookingId);
       if (!booking) {
-        booking = {id: nextBookingId++, confirmedAt: new Date().toISOString(), confirmedDay: BookingHistory.day()};
+        booking = {id: (BookingHistory.newId ? BookingHistory.newId() : nextBookingId++), confirmedAt: new Date().toISOString(), confirmedDay: BookingHistory.day()};
         draft.bookingId = booking.id;
         confirmedBookings.push(booking);
       }
@@ -529,17 +638,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     } catch (error) { showToast(error.message || 'Không lưu được mẫu trong trình duyệt.', false); }
   });
   try { renderExamples(); } catch (error) { showToast(error.message, false); }
+  // Mẫu đã lưu được đồng bộ từ Firebase: làm mới danh sách "Mẫu đã lưu (N)" ngay.
+  window.addEventListener('bookingmemory-updated', () => { try { renderExamples(); } catch (error) { showToast(error.message, false); } });
 
   // ===== BƯỚC 2: Kiểm tra booking vừa tạo =====
   async function handleRunCheck() {
     if (!currentParsedResult) { await handleCreateZaloForm(); if (!currentParsedResult) return; }
 
     const need = currentParsedResult.dayMonthKey;
-    if (need && SHEET_TABS[need] && need !== currentTabKey) {
+    if (need && isValidTabKey(need) && need !== loadedTabKey) {
       pendingSearchAfterLoad = true;
       pendingCheckBookingId  = null;
       setCheckResult('loading', `Đang chuyển sang ngày ${need}...`, `Hệ thống đang nạp dữ liệu ngày <b>${need}</b> từ Google Sheet. Vui lòng chờ...`);
-      tabSelect.value = need;
+      selectTab(need);
       loadSheetTab(need);
       return;
     }
@@ -556,11 +667,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderConfirmedList();
 
     const need = bk.dayMonthKey;
-    if (need && SHEET_TABS[need] && need !== currentTabKey) {
+    if (need && isValidTabKey(need) && need !== loadedTabKey) {
       pendingSearchAfterLoad = true;
       pendingCheckBookingId  = id;
-      setCheckResult('loading', `Đang chuyển sang ngày ${need}...`, `Hệ thống đang nạp dữ liệu ngày <b>${need}</b> từ Google Sheet để kiểm tra <b>${bk.parsed.customerString}</b>...`);
-      tabSelect.value = need;
+      setCheckResult('loading', `Đang chuyển sang ngày ${need}...`, `Hệ thống đang nạp dữ liệu ngày <b>${need}</b> từ Google Sheet để kiểm tra <b>${escapeHtml(bk.parsed.customerString)}</b>...`);
+      selectTab(need);
       loadSheetTab(need);
       return;
     }
@@ -571,14 +682,17 @@ document.addEventListener('DOMContentLoaded', async () => {
   function performCrossCheck(bk) {
     const parsed = bk ? bk.parsed : currentParsedResult;
     if (!parsed) return;
+    const needTab = bk ? bk.dayMonthKey : parsed.dayMonthKey;
+    if (!loadedTabKey || (needTab && isValidTabKey(needTab) && needTab !== loadedTabKey)) {
+      if (bk) { bk.checkStatus = 'pending'; bk.matchLabel = ''; renderConfirmedList(); }
+      setCheckResult('notfound', `⚠️ Chưa đối soát được`, `Chưa tải được dữ liệu Google Sheet của ngày ${escapeHtml(needTab || currentTabKey)}. Thử lại sau khi tab được nạp xong.`);
+      return;
+    }
 
     const criteria = document.querySelector('input[name="checkCriteria"]:checked')?.value || 'customer';
 
     // Từ khóa tìm kiếm
-    const custLow  = parsed.customerString.toLowerCase();
-    const phoneM   = parsed.customerString.match(/\+?\d{8,14}/);
-    const phone    = phoneM ? phoneM[0].replace(/\D/g,'') : '';
-    const custKws  = custLow.split(/[\s,]+/).filter(k => k.length > 2 && !k.startsWith('+'));
+    const phone    = phoneDigits(parsed.customerString);
     const codeKey  = (parsed.originalCode || '').toLowerCase();
     const agencyK  = parsed.agency.toLowerCase().replace(/^(vxr|vpl|đại lý)\s*/i,'').trim();
     const pickKws  = parsed.pickupPoint.toLowerCase().split(/[\s,]+/).filter(k => k.length > 2);
@@ -587,16 +701,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     let   label   = '';
 
     liveSheetRows.forEach(row => {
-      const rCust   = row.customer.toLowerCase();
-      const rPhoneM = (row.customer.match(/\+?\d{8,14}/) || [''])[0].replace(/\D/g,'');
       const rAgency = row.agency.toLowerCase();
       const rPickup = row.pickupPoint.toLowerCase();
       const full    = `${row.agency} ${row.customer} ${row.pickupPoint} ${row.dropPoint} ${row.note}`.toLowerCase();
       let   ok      = false;
 
       if (criteria === 'customer' || criteria === 'all') {
-        if (phone.length >= 8 && rPhoneM && rPhoneM.includes(phone))  { ok = true; label = `SĐT (${phone})`; }
-        else if (custKws.some(k => rCust.includes(k)))                 { ok = true; label = `Tên (${parsed.customerString})`; }
+        const how = matchCustomer(parsed.customerString, row.customer);
+        if (how === 'phone')                                           { ok = true; label = `SĐT (${phone})`; }
+        else if (how === 'name')                                       { ok = true; label = `Tên (${parsed.customerString})`; }
         else if (codeKey && full.includes(codeKey))                    { ok = true; label = `Mã ${codeKey}`; }
       }
       if ((criteria === 'agency' || criteria === 'all') && !ok) {
@@ -614,17 +727,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Cập nhật hộp kết quả hiển thị bên trái
     if (found) {
       const details = matched.slice(0, 2).map(r =>
-        `• <b>${r.trip}</b>: ${r.agency} | <b>${r.customer}</b> | Đón: ${r.pickupPoint}`
+        `• <b>${escapeHtml(r.trip)}</b>: ${escapeHtml(r.agency)} | <b>${escapeHtml(r.customer)}</b> | Đón: ${escapeHtml(r.pickupPoint)}`
       ).join('<br>');
       setCheckResult('found',
         `✅ Tìm thấy ${matched.length} cuốc – Khớp: ${label}`,
-        `${details}<br><span class="text-emerald-700 font-semibold">➡️ Cuốc xe của <b>${parsed.customerString}</b> đã có trên Sheet ngày ${currentTabKey}!</span>`
+        `${details}<br><span class="text-emerald-700 font-semibold">➡️ Cuốc xe của <b>${escapeHtml(parsed.customerString)}</b> đã có trên Sheet ngày ${currentTabKey}!</span>`
       );
       showToast(`✅ Tìm thấy "${parsed.customerString}" trên Sheet!`);
     } else {
-      const critName = criteria === 'customer' ? `Tên/SĐT (${parsed.customerString})` :
+      const critName = escapeHtml(criteria === 'customer' ? `Tên/SĐT (${parsed.customerString})` :
                        criteria === 'agency'   ? `Đại lý (${parsed.agency})` :
-                       criteria === 'pickup'   ? `Điểm đón (${parsed.pickupPoint})` : 'Tất cả tiêu chí';
+                       criteria === 'pickup'   ? `Điểm đón (${parsed.pickupPoint})` : 'Tất cả tiêu chí');
       setCheckResult('notfound',
         `⚠️ Chưa thấy "${parsed.customerString}" trên Sheet ngày ${currentTabKey}`,
         `Không khớp với <b>${critName}</b>.<br><span class="text-rose-700 font-semibold">➡️ Vui lòng kiểm tra lại với điều hành!</span>`
@@ -679,9 +792,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       const month = parseInt(m[2], 10);
       const key = `${day}/${month}`;
 
-      if (SHEET_TABS[key]) {
+      if (isValidTabKey(key)) {
         if (tabSelect.value !== key) {
-          tabSelect.value = key;
+          selectTab(key);
           // Hiệu ứng nhấp nháy viền nổi bật để người dùng nhận biết ngày đã chuyển
           tabSelect.classList.add('ring-2', 'ring-amber-400', 'bg-emerald-900');
           setTimeout(() => tabSelect.classList.remove('ring-2', 'ring-amber-400', 'bg-emerald-900'), 1500);
@@ -713,8 +826,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       const d = parseInt(dateM[1], 10);
       const m = parseInt(dateM[2], 10);
       const k = `${d}/${m}`;
-      if (SHEET_TABS[k] && tabSelect.value !== k) {
-        tabSelect.value = k;
+      if (isValidTabKey(k) && tabSelect.value !== k) {
+        selectTab(k);
         tabSelect.classList.add('ring-2', 'ring-amber-400');
         setTimeout(() => tabSelect.classList.remove('ring-2', 'ring-amber-400'), 1500);
         if (currentTabKey !== k) {
@@ -734,7 +847,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     copyText(rawInput.value, 'Đã sao chép booking. Mở Gem rồi dán vào cuộc trò chuyện.');
   });
   btnCopyZalo.addEventListener('click', handleCopyZalo);
-  btnCopyExcel?.addEventListener('click', () => copyText(outputExcel.value, '📊 Đã sao chép 4 cột Excel (Tab)!'));
+  btnCopyExcel?.addEventListener('click', () => copyText(outputExcel.value, '📊 Đã sao chép 5 cột Excel (Tab)!'));
 
   document.getElementById('exportHistory').addEventListener('click', () => {
     const url = URL.createObjectURL(new Blob([JSON.stringify(confirmedBookings,null,2)], {type:'application/json'}));
@@ -783,13 +896,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     for (const [tabKey, bks] of Object.entries(tabsMap)) {
-      if (tabKey && SHEET_TABS[tabKey] && tabKey !== currentTabKey) {
-        tabSelect.value = tabKey;
+      if (tabKey && isValidTabKey(tabKey) && tabKey !== loadedTabKey) {
+        selectTab(tabKey);
         await new Promise(resolve => {
           const timer = setTimeout(resolve, 4000);
           window.onGoogleSheetDataLoadedOnce = () => { clearTimeout(timer); resolve(); };
           loadSheetTab(tabKey);
         });
+      }
+      if (tabKey && loadedTabKey !== tabKey) {
+        // Không tải được tab ngày này: không đối soát với dữ liệu ngày khác
+        bks.forEach(bk => { bk.checkStatus = 'pending'; bk.matchLabel = ''; });
+        continue;
       }
       bks.forEach(bk => performCrossCheck(bk));
     }
@@ -1081,8 +1199,9 @@ Số điện thoại: +48735977916`,
   });
 
   // ===== KHỞI ĐỘNG =====
+  currentTabKey = todayTabKey();
   initTabSelect();
-  loadSheetTab('24/11');
+  loadSheetTab(currentTabKey);
   renderConfirmedList();
   updateGeminiStatusBadge();
 });

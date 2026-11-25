@@ -32,7 +32,7 @@ Số người: 2
   assert.equal(sylvie.customerString,'Sylvie +33770493406');
   assert.equal(sylvie.travelDate,`24/11/${new Date().getFullYear()}`);
   assert.equal(sylvie.route,'PL - NB');
-  assert.equal(sylvie.excel4Cols,'Pu Luong Roots Homestay\tThe Green House Homestay Ta Coc\tSylvie +33770493406\t2');
+  assert.equal(sylvie.excel4Cols,'Pu Luong Roots Homestay\tThe Green House Homestay Ta Coc\tSylvie +33770493406\t2\tPù Luông Roots');
   for (const label of ['Giờ đón','Thời gian đón']) {
     const withTime = Parser.parse(`${label}: 07:00 - 07:30\nĐịa điểm đón: Pu Luong Roots Homestay\nĐịa điểm trả: The Long Travel`);
     assert.equal(withTime.pickupPoint,'Pu Luong Roots Homestay');
@@ -140,7 +140,7 @@ Số người: 2
   assert.equal(Memory.recall(sylvieText.replaceAll('\n','\r\n')).pax,2);
   assert.equal(Memory.recall(Memory.list()[0].form).pickupTime,'07:00');
   assert.equal(Memory.recall(sylvieText.replace('Sylvie','Alice')),null);
-  assert.ok(Memory.recall(sylvieText,'Mon').zaloMsg.includes('Mon xác nhận booking'));
+  assert.ok(Memory.recall(sylvieText,'Mon').zaloMsg.includes('Nhân viên xác nhận: Mon'));
   Memory.remove(learned.id);
   assert.equal(Memory.list().length,0);
   assert.equal(Memory.prompt(sylvieText),'');
@@ -221,7 +221,7 @@ Số người: 2
   assert.equal(adapted.travelDate,'25/11/2026');
   assert.equal(adapted.code,'tl251126');
   assert.equal(adapted.pickupPoint,'Pu Luong Roots Homestay');
-  assert.ok(adapted.zaloMsg.includes('Alice +441234567890'));
+  assert.ok(adapted.zaloMsg.includes('Alice – +441234567890'));
   assert.ok(!adapted.zaloMsg.includes('Sylvie'));
   assert.equal(adapted.isLearnedExample,true);
   assert.equal(Memory.recall(Parser.parse(customRaw).zaloMsg).customerString,'Sylvie +33770493406');

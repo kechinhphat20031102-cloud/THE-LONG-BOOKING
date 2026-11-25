@@ -18,11 +18,6 @@
           "actual": ""
         },
         {
-          "field": "customerString",
-          "expected": "",
-          "actual": "Khách"
-        },
-        {
           "field": "pickupTime",
           "expected": "15h10",
           "actual": "15:10"
@@ -114,7 +109,7 @@
         {
           "field": "customerString",
           "expected": "johann +43 664 4112015",
-          "actual": "Khách +436644112015"
+          "actual": "+436644112015"
         },
         {
           "field": "pickupTime",

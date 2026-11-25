@@ -163,7 +163,56 @@ const BookingParser = {
   },
 
   // Hàm trích xuất chính
+  // Tách "Tên +84..." thành tên và SĐT (SĐT ở cuối chuỗi).
+  splitContact(text) {
+    const s = String(text || '').trim();
+    const m = /^(.*?)[\s,–-]*((?:\+|\b0)\d[\d .()-]{6,}\d)\s*$/.exec(s);
+    return m ? { name: m[1].trim(), phone: m[2].trim() } : { name: s, phone: '' };
+  },
+
+  // Form Zalo xác nhận (mẫu mới 25/11/2026).
+  renderForm(d) {
+    const code = String(d.code || '').replace(/^tl/i, 'TL');
+    return `${d.topMention ? d.topMention.trim() + '\n' : ''}✅ THE LONG TRAVEL – XÁC NHẬN BOOKING
+━━━━━━━━━━━━━━━━━━
+🏢 Đại lý: ${d.agency || ''}
+🎫 Mã booking: ${code}
+📅 Ngày đi: ${d.travelDate || ''}
+🛣️ Lịch trình: ${d.route || ''}
+🚌 Loại xe: ${d.vehicle || ''}
+👥 Số lượng khách: ${d.pax ?? ''}
+👤 Thông tin khách: ${d.customerInfo || ''}
+⏰ Giờ đón: ${d.pickupTime || ''}
+📍 Điểm đón: ${d.pickupPoint || ''}
+🏁 Điểm trả: ${d.dropPoint || ''}
+💵 Giá dịch vụ: ${d.price || ''}
+📝 Ghi chú: ${d.note || ''}
+👤 Nhân viên xác nhận: ${d.staff || ''}
+━━━━━━━━━━━━━━━━━━
+${this.FORM_FOOTER}`;
+  },
+
+  FORM_FOOTER: `💳 LƯU Ý QUAN TRỌNG VỀ THANH TOÁN
+Đối với đại lý chưa ký HĐ công nợ, BOOKING CHỈ CÓ HIỆU LỰC KHI ĐÃ THANH TOÁN VÀ GỬI UNC VÀO NHÓM TRƯỚC KHI KHÁCH KHỞI HÀNH.
+• Chuyển khoản không ghi nội dung.
+• Booking chưa thanh toán và gửi UNC sẽ chưa được đảm bảo giữ chỗ.
+⚠️ LƯU Ý ĐÓN KHÁCH
+• Nhờ đại lý nhắc khách chuẩn bị hành lý và có mặt đúng khung giờ đã hẹn.
+• Nếu khách không kịp giờ đón, vui lòng hướng dẫn khách chủ động đến văn phòng theo hướng dẫn của điều hành.
+🤝 Anh/chị vui lòng kiểm tra lại thông tin và phản hồi nếu có sai sót hoặc thay đổi.
+❤️ Cảm ơn Quý đại lý đã luôn tin tưởng và đồng hành cùng The Long Travel!`,
+
   parse(rawText, operator = 'Felix') {
+    // Form xác nhận mẫu mới dán ngược vào: đổi về nhãn cũ để đọc lại được (bỏ phần lưu ý cuối form).
+    if (/THE LONG TRAVEL\s*[–-]\s*XÁC NHẬN BOOKING/i.test(rawText || '')) {
+      rawText = rawText.split(/\n[^\S\n]*━+[^\S\n]*\n(?=[^\n]*(?:THANH TOÁN|LƯU Ý))/)[0]
+        .replace(/^[^\S\n]*✅[^\n]*$/m, 'Thế Long Travel xác nhận booking')
+        .replace(/^[^\S\n]*━+[^\S\n]*$/gm, '')
+        .replace(/^[^\p{L}\n]+(?=\p{L})/gmu, '')
+        .replace(/^Mã booking:/m, 'Code:').replace(/^Giá dịch vụ:/m, 'Giá vé:').replace(/^Ghi chú:/m, 'Note:')
+        .replace(/^Nhân viên xác nhận:[^\n]*$/m, '')
+        .replace(/^Thông tin khách:\s*(.*?)\s*[–—]\s*(.*)$/m, 'Tên khách: $1 $2').replace(/^Thông tin khách:/m, 'Tên khách:');
+    }
     if (!rawText || !rawText.trim()) return null;
     rawText = rawText.normalize('NFC').replace(/[\u00a0\u202f]/g, ' ').replace(/[\u200b-\u200f\u202a-\u202e\u2066-\u2069\ufeff]/g, '')
       .replace(/^[ \t]*[-•][ \t]+/gm, '')
@@ -786,24 +835,12 @@ const BookingParser = {
 
     const staff = operator || 'Felix';
 
-    const zaloMsg = `${topMention}Thế Long Travel xác nhận booking
-Đại lý             : ${agency}
-Code               : ${code}
-Ngày đi            : ${travelDate}
-Lịch trình         : ${route}
-Loại xe            : ${vehicle}
-Số lượng khách     : ${pax}
-Tên khách          : ${customerString}
-Giờ đón            : ${pickupTime}
-Điểm đón           : ${pickupPoint || ''}
-Điểm trả           : ${dropPoint || ''}
-Giá vé             : ${price}
-Note               : ${note}
-Lưu ý              : Các điểm bao gồm đón bên em hẹn đón theo thời gian quy định đã hẹn nếu khách không chuẩn bị kịp thì đại lí báo khách tự đến văn phòng hộ bên e
-${staff} xác nhận booking
-Anh chị vui lòng check lại thông tin giúp em, em cảm ơn ạ`;
+    if (/^Khách\b/.test(customerString)) customerString = customerString.replace(/^Khách\s*/, '');
+    const contact = this.splitContact(customerString);
+    const customerInfo = contact.phone ? (contact.name ? `${contact.name} – ${contact.phone}` : contact.phone) : contact.name;
+    const zaloMsg = this.renderForm({ topMention, agency, code, travelDate, route, vehicle, pax, customerInfo, pickupTime, pickupPoint, dropPoint, price, note, staff });
 
-    const excel4Cols = `${pickupPoint || ''}\t${dropPoint || ''}\t${customerString}\t${pax}`;
+    const excel4Cols = `${pickupPoint || ''}\t${dropPoint || ''}\t${customerString}\t${pax}\t${agency || ''}`;
 
     return {
       topMention,
@@ -816,6 +853,7 @@ Anh chị vui lòng check lại thông tin giúp em, em cảm ơn ạ`;
       vehicle,
       pax,
       customerString,
+      customerInfo,
       pickupTime,
       pickupPoint: pickupPoint || '',
       dropPoint: dropPoint || '',
@@ -831,4 +869,4 @@ Anh chị vui lòng check lại thông tin giúp em, em cảm ơn ạ`;
 };
 
 if (typeof module !== 'undefined') module.exports = BookingParser;
-if (typeof window !== 'undefined') if (typeof module !== "undefined") module.exports = BookingParser; if (typeof window !== "undefined") if (typeof module !== "undefined") module.exports = BookingParser; if (typeof window !== "undefined") if (typeof module !== "undefined") module.exports = BookingParser; if (typeof window !== "undefined") if (typeof module !== "undefined") module.exports = BookingParser; if (typeof window !== "undefined") if (typeof module !== "undefined") module.exports = BookingParser; if (typeof window !== "undefined") window.BookingParser = BookingParser;
+if (typeof window !== 'undefined') window.BookingParser = BookingParser;

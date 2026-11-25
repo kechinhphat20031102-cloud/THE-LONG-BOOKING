@@ -154,7 +154,7 @@
           <span id="badgeZaloSource" class="hidden text-xs"></span>
         </div>
         <textarea id="outputZalo"
-          class="flex-1 min-h-[170px] p-3 text-xs font-mono bg-blue-50/40 text-slate-800 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none whitespace-pre-wrap leading-relaxed custom-scrollbar resize-none"
+          class="min-h-[170px] p-3 text-xs font-mono bg-blue-50/40 text-slate-800 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none whitespace-pre-wrap leading-relaxed custom-scrollbar resize-none"
           placeholder="Form Zalo sẽ tự điền vào đây sau khi nhấn Bước 1...&#10;Có thể chỉnh sửa trực tiếp trước khi sao chép."></textarea>
 
         <div class="mt-3 p-3 rounded-lg bg-amber-50 border border-amber-200 text-xs">
@@ -167,14 +167,14 @@
         <div class="mt-2.5 pt-2 border-t border-blue-100 flex items-center justify-between gap-2">
           <div class="flex-1">
             <span class="text-[10px] font-bold text-emerald-700 flex items-center gap-1 mb-1">
-              <i class="fa-solid fa-table"></i> Dán Excel (Đón | Trả | Tên/Code | SL):
+              <i class="fa-solid fa-table"></i> Dán Excel (Đón | Trả | Tên/Code | SL | Đại lý):
             </span>
             <input id="outputExcel" type="text" readonly
               class="w-full px-2.5 py-1.5 text-xs font-mono bg-emerald-50 text-emerald-900 border border-emerald-300 rounded-lg focus:outline-none"
               placeholder="The Long Travel&#9;Văn phòng&#9;Khách&#9;1">
           </div>
           <button id="btnCopyExcel" type="button" class="self-end bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition flex items-center gap-1 shadow-sm whitespace-nowrap">
-            <i class="fa-solid fa-copy text-[11px]"></i> Copy 4 cột
+            <i class="fa-solid fa-copy text-[11px]"></i> Copy 5 cột
           </button>
         </div>
       </div>
@@ -440,9 +440,27 @@
   </div>
 
   <script src="booking_history.js"></script>
+  <script src="firebase_config.js"></script>
+  <script src="booking_history_firebase.js"></script>
   <script src="booking_memory.js"></script>
   <script src="gemini_service.js"></script>
   <script src="parser.js"></script>
+  <script src="dataset_examples.js"></script>
+  <script src="dataset_learner.js"></script>
   <script src="app.js"></script>
+  <script>
+    // Ô Form Zalo tự cao theo nội dung để thấy toàn bộ form, không phải cuộn bên trong.
+    (function autoGrowZalo() {
+      const ta = document.getElementById('outputZalo');
+      if (!ta) return;
+      const grow = () => { ta.style.height = 'auto'; ta.style.height = (ta.scrollHeight + 4) + 'px'; };
+      const d = Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, 'value');
+      Object.defineProperty(ta, 'value', { get() { return d.get.call(this); }, set(v) { d.set.call(this, v); grow(); } });
+      ta.style.overflowY = 'hidden';
+      ta.addEventListener('input', grow);
+      window.addEventListener('resize', grow);
+      grow();
+    })();
+  </script>
 </body>
 </html>

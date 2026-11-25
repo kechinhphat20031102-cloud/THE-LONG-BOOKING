@@ -5,7 +5,7 @@ from contextlib import contextmanager, closing
 from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 
 ROOT = Path(__file__).resolve().parent
-ASSETS = {'index.html','app.js','parser.js','gemini_service.js','booking_memory.js','booking_history.js'}
+ASSETS = {'index.html','app.js','parser.js','gemini_service.js','booking_memory.js','booking_history.js','firebase_config.js','booking_history_firebase.js','dataset_examples.js','dataset_learner.js'}
 LOCK = threading.Lock()
 
 def validate(items):

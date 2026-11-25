@@ -9,15 +9,16 @@ const BookingMemory = {
     return data;
   },
   fields(form) {
-    const labels = {'Đại lý':'agency','Code':'code','Ngày đi':'travelDate','Lịch trình':'route','Loại xe':'vehicle','Số lượng khách':'pax','Tên khách':'customerString','Giờ đón':'pickupTime','Điểm đón':'pickupPoint','Điểm trả':'dropPoint','Giá vé':'price','Note':'note'};
+    const labels = {'Đại lý':'agency','Code':'code','Mã booking':'code','Ngày đi':'travelDate','Lịch trình':'route','Loại xe':'vehicle','Số lượng khách':'pax','Tên khách':'customerString','Thông tin khách':'customerString','Giờ đón':'pickupTime','Điểm đón':'pickupPoint','Điểm trả':'dropPoint','Giá vé':'price','Giá dịch vụ':'price','Note':'note','Ghi chú':'note'};
     const result = {};
     for (const line of form.split(/\r?\n/)) {
       const colon = line.indexOf(':');
-      const field = labels[line.slice(0, colon).trim()];
+      const field = labels[line.slice(0, colon).replace(/^[^\p{L}]+/u, '').trim()];
       if (colon >= 0 && field) result[field] = line.slice(colon + 1).trim();
     }
-    for (const field of ['travelDate','route','customerString','pickupTime','pickupPoint','dropPoint']) {
-      if (!result[field]) throw new Error('Cần điền đủ ngày, tuyến, khách, giờ đón, điểm đón và điểm trả trước khi lưu mẫu.');
+    if (result.customerString) result.customerString = result.customerString.replace(/\s+[–—]\s+/, ' ');
+    for (const field of ['travelDate','route','pickupPoint']) {
+      if (!result[field]) throw new Error('Cần điền đủ ngày đi, lịch trình và điểm đón trước khi lưu mẫu.');
     }
     if (!/^\d+$/.test(result.pax || '') || Number(result.pax) < 1) throw new Error('Số lượng khách phải là số nguyên dương.');
     result.pax = Number(result.pax);
@@ -34,9 +35,10 @@ const BookingMemory = {
     if (/(?:hôm nay|ngày mai|ngày kia|(?:^|\s)mai(?!\s+ch[aâ]u)(?=\s|$))/i.test(raw) && day(entry.updatedAt) !== day(Date.now())) return null;
     const data = this.fields(entry.form);
     const date = /^(\d{1,2})\/(\d{1,2})\/\d{4}$/.exec(data.travelDate);
-    const zaloMsg = entry.form.replace(/^[^\r\n]* xác nhận booking[ \t]*$/gm, line => /Thế Long Travel/i.test(line) ? line : `${staff} xác nhận booking`);
+    const zaloMsg = entry.form.replace(/^[^\r\n]* xác nhận booking[ \t]*$/gm, line => /Thế Long Travel/i.test(line) ? line : `${staff} xác nhận booking`)
+      .replace(/^(\W*Nhân viên xác nhận:).*$/gm, `$1 ${staff}`);
     return {...data, staff, dayMonthKey: date ? `${Number(date[1])}/${Number(date[2])}` : '',
-      zaloMsg, excel4Cols: `${data.pickupPoint}\t${data.dropPoint}\t${data.customerString}\t${data.pax}`,
+      zaloMsg, excel4Cols: `${data.pickupPoint}\t${data.dropPoint}\t${data.customerString}\t${data.pax}\t${data.agency || ''}`,
       isAiGenerated:false, isSavedExample:true};
   },
   parser() { return typeof BookingParser !== 'undefined' ? BookingParser : (typeof require === 'function' ? require('./parser') : null); },
@@ -85,13 +87,13 @@ const BookingMemory = {
       updated.dayMonthKey = `${Number(date[1])}/${Number(date[2])}`;
       updated.code = `tl${date[1].padStart(2,'0')}${date[2].padStart(2,'0')}${date[3].slice(-2)}`;
     }
-    const labels = {'Đại lý':'agency','Code':'code','Ngày đi':'travelDate','Lịch trình':'route','Loại xe':'vehicle','Số lượng khách':'pax','Tên khách':'customerString','Giờ đón':'pickupTime','Điểm đón':'pickupPoint','Điểm trả':'dropPoint','Giá vé':'price'};
-    updated.zaloMsg = result.zaloMsg.split('\n').map(line => {
-      const colon = line.indexOf(':');
-      const field = labels[line.slice(0,colon).trim()];
-      return colon >= 0 && field ? line.slice(0,colon+1) + ' ' + updated[field] : line;
-    }).join('\n');
-    updated.excel4Cols = `${updated.pickupPoint}\t${updated.dropPoint}\t${updated.customerString}\t${updated.pax}`;
+    const P = this.parser();
+    if (P && P.renderForm) {
+      const c = P.splitContact(updated.customerString);
+      updated.customerInfo = c.phone ? (c.name ? `${c.name} – ${c.phone}` : c.phone) : c.name;
+      updated.zaloMsg = P.renderForm(updated);
+    }
+    updated.excel4Cols = `${updated.pickupPoint}\t${updated.dropPoint}\t${updated.customerString}\t${updated.pax}\t${updated.agency || ''}`;
     return updated;
   },
   save(raw, form) {
